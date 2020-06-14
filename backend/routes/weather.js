@@ -3,7 +3,9 @@ const User = require('../models/userid');
 
 
 const user_info = ''
-router.post('/add',async (req,res)=>{
+router.post('/usercreated/:id',async (req,res)=>{
+    //where is your req body?
+
     user_info = new User({
         username,
         password,
