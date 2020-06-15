@@ -2,22 +2,32 @@ const router = require('express').Router();
 const User = require('../models/userid');
 
 
-const user_info = ''
-router.post('/usercreated/:id',async (req,res)=>{
-    //where is your req body?
+let user_info = ''
 
-    user_info = new User({
+// router.post('/usercreated',(req,res)=>{
+    
+//     const username = req.body.username
+//     const password = req.body.password
+
+//     user_info = new User({
+//         username,
+//         password,
+//     })
+
+//     user_info.save().then(()=>res.json(user_info))
+// })
+
+router.post('/usercreated', async (req,res)=>{
+    const username = req.body.username
+    const password = req.body.password
+
+    user_info = await new User({
         username,
-        password,
-        cityName
-    })
-    try{
-        const login = await user_info.save()
-        res.send("Success.")
-    }catch{
-        (err)=>{
-            console.log(err)
-            res.send("Something is wrong.")
-        }
-    }
+        password
+    }).save()
+
+    res.json(user_info)
+    
 })
+
+module.exports=router

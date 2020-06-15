@@ -13,8 +13,7 @@ const userInfo = new Schema ({
         required:true,
     },
     cityName:{
-        type:String,
-        required:true,
+        type:String
     },
 
     cityLocation:{

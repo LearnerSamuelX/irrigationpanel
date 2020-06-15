@@ -9,12 +9,14 @@ class Signupcomponent extends Component{
         //initialize method here methods here
         this.onChangeUsername = this.onChangeUsername.bind(this);
         this.onChangePassword = this.onChangePassword.bind(this);
+        this.onChangePassword_2 = this.onChangePassword_2.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
 
         // define states here
         this.state={
             username:"",
             password:"",
+            password_2:"",
         }
     }
 
@@ -31,20 +33,24 @@ class Signupcomponent extends Component{
             })
         }
 
+        onChangePassword_2(e) {
+            this.setState({
+                password_2:e.target.value
+            })
+        }
+
         onSubmit(e) {
             e.preventDefault();
-            const user_info = {
-                username:this.state.username,
-                password:this.state.password,
+            //validate user input
+            if (this.state.password!==this.state.password_2){
+                alert("Passwords don't match. Please type again")
+            }else{
+                const user_info = {
+                    username:this.state.username,
+                    password:this.state.password,
+                }
+                axios.post('http://localhost:5000/weather/usercreated',user_info).then((res)=>{console.log(res.data)}).catch((err)=>{console.log(err)});
             }
-
-            console.log(user_info)
-
-            //use axios to send post request in the submit method
-            axios.post('http://localhost:3000/weather/usercreated/'+this.props.match.params.id,user_info)
-            .then(res => console.log(res.data));
-
-            // window.location = '/';
         }
     
     
@@ -55,8 +61,10 @@ class Signupcomponent extends Component{
                     <label>Username:</label>
                     <input type='text'value={this.state.username} onChange={this.onChangeUsername}></input>
                     <label>Password:</label>
-                    <input type='text'value={this.state.password} onChange={this.onChangePassword}></input>
-                    <button onClick={this.onSubmit}>Login</button>
+                    <input type='password'value={this.state.password} onChange={this.onChangePassword}></input>
+                    <label>Confirm Password:</label>
+                    <input type='password'value={this.state.password_2} onChange={this.onChangePassword_2}></input>
+                    <button onClick={this.onSubmit}>Sign Up</button>
                 </form>
             </div>
         )
