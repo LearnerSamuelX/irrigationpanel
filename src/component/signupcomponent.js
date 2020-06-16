@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import {useHistory} from 'react-router-dom'
 
 class Signupcomponent extends Component{
 
@@ -49,10 +50,14 @@ class Signupcomponent extends Component{
                     username:this.state.username,
                     password:this.state.password,
                 }
-                axios.post('http://localhost:5000/weather/usercreated',user_info).then((res)=>{console.log(res.data)}).catch((err)=>{console.log(err)});
+
+                axios.post('http://localhost:5000/weather/usercreated',user_info)
+                // .then((res)=>{console.log(res.data)}).catch((err)=>{console.log(err)});
+                axios.get('http://localhost:5000/weather/loggedin')
+                let path = 'weatherPanel'
+                this.props.history.push(path);
             }
-        }
-    
+        }    
     
     render(){
         return(
