@@ -46,16 +46,18 @@ class Signupcomponent extends Component{
             if (this.state.password!==this.state.password_2){
                 alert("Passwords don't match. Please type again")
             }else{
-                const user_info = {
+                let user_info = {
                     username:this.state.username,
                     password:this.state.password,
                 }
 
                 axios.post('http://localhost:5000/weather/usercreated',user_info)
-                // .then((res)=>{console.log(res.data)}).catch((err)=>{console.log(err)});
-                axios.get('http://localhost:5000/weather/loggedin')
+                .then((res)=>{console.log(res.data)})
+                // .catch((err)=>{console.log(err)})
                 let path = 'weatherPanel'
                 this.props.history.push(path);
+
+                axios.get('http://localhost:5000/weather/loggedin')
             }
         }    
     

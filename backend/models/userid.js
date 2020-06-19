@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const userInfo = new Schema ({
+    
     username:{
         type:String,
         required:true,
@@ -12,18 +13,20 @@ const userInfo = new Schema ({
         type:String,
         required:true,
     },
+
     cityName:{
         type:String
     },
 
-    cityLocation:{
-        type: {
+    location:{
+        type:{
             type: String,
-            enum: ['Point'],
+            enum: ['Point'], 
         },
-        coordinates: {
-            type: [Number]
-       }
+
+        coordinates:{
+            type: [Number],
+        }
     }
 })
 

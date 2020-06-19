@@ -5,20 +5,6 @@ const Users = require('../models/userid'); //name of the database
 
 let user_info = ''
 
-// router.post('/usercreated',(req,res)=>{
-    
-//     const username = req.body.username
-//     const password = req.body.password
-
-//     user_info = new User({
-//         username,
-//         password,
-//     })
-
-//     user_info.save().then(()=>res.json(user_info))
-// })
-
-
 router.get('/loggedin',async (req,res)=>{
     if (user_info===''){
         res.send('Please log into the system')
@@ -38,21 +24,29 @@ router.post('/usercreated', async (req,res)=>{
     }).save()
 
     res.json(user_info)
-    // res.redirect('loggedin')
 })
 
 //use get for now, change it to post later
-router.get('/loggedin/citySearch',async (req,res)=>{
-    //search citylist.json
-    //const cityname = req.body.cityName
+router.post('/loggedin/citySearch',(req,res)=>{
+    let cityname = req.body.cityName
+    let countryname = req.body.country
 
-    fs.readFile('../public/weatherdata/cityList.json', (err,data)=>{
+
+    if(countryname==="Canada"||countryname==="CAN"){
+        countryname ="CA"
+    }
+
+
+    fs.readFile('../public/weatherdata/citylist.json', (err,data)=>{
         if(err){
             console.log(err)
             res.send('Wrong.')
         }else{
-            console.log('Success')
-            res.json(JSON.parse(data).filter(i=>i.name==="Toronto"))
+
+            user_info.cityName = cityname
+            let selected_city=JSON.parse(data).filter(i=>i.name===cityname && i.country===countryname)
+            console.log(user_info)
+            res.json(selected_city)
         }
     })
 
