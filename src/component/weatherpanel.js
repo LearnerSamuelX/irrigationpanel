@@ -20,10 +20,17 @@ class WeatherPanel extends Component{
 
     componentDidMount(){
         axios.get('http://localhost:5000/weather/loggedin').then((res)=>{
-            console.log(res.data)
-            this.setState({
-                username:res.data.username
-            })
+
+            if(res.data===null){
+                this.setState({
+                    username:""
+                })
+            }else{
+                console.log(res.data)
+                this.setState({
+                    username:res.data.username
+                })
+            }
         })
     }
 
@@ -47,8 +54,9 @@ class WeatherPanel extends Component{
         }
 
         
-        axios.post('http://localhost:5000/weather/loggedin/citySearch',searchCity).then((res)=>{
-            console.log(res.data[0])
+        axios.post('http://localhost:5000/weather/loggedin/citySearch',searchCity)
+        .then((res)=>{
+            console.log(res.data)
         })
 
     }

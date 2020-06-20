@@ -17,19 +17,8 @@ const userInfo = new Schema ({
     cityName:{
         type:String
     },
-
-    location:{
-        type:{
-            type: String,
-            enum: ['Point'], 
-        },
-
-        coordinates:{
-            type: [Number],
-        }
-    }
 })
 
-const Users = mongoose.model('Users', userInfo)
 
+const Users = mongoose.model('Users', userInfo)
 module.exports = Users
