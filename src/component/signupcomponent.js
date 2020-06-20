@@ -59,14 +59,8 @@ class Signupcomponent extends Component{
                     console.log(res[0].data)
                 })
 
-
-                // axios.post('http://localhost:5000/weather/usercreated',user_info)
-                // .then((res)=>{console.log(res.data)})
-                // .catch((err)=>{console.log(err)})
-                let path = 'weatherPanel'
+                let path ='citySearch'
                 this.props.history.push(path);
-
-                // axios.get('http://localhost:5000/weather/loggedin')
             }
         }    
     

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 
-class WeatherPanel extends Component{
+class CitySearch extends Component{
     constructor(props){
         super(props);
 
@@ -59,6 +59,9 @@ class WeatherPanel extends Component{
             console.log(res.data)
         })
 
+        let path = 'usersPanel'
+        this.props.history.push(path);
+
     }
 
     render(){ 
@@ -87,4 +90,4 @@ class WeatherPanel extends Component{
     }
 }
 
-export default WeatherPanel;
+export default CitySearch;

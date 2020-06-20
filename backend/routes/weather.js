@@ -19,26 +19,21 @@ router.post('/usercreated', async (req,res)=>{
 })
 
 router.get('/loggedin',async (req,res)=>{
-    // if (user_info===''){
-    //     res.send('Please log into the system')
-    // }else{
-    //     let user_selected = await Users.findOne({username:user_info.username})
-    //     res.json(user_selected)
-    // }
     let user_selected = await Users.findOne({username:user_info.username})
     res.json(user_selected)
 })
 
 //use get for now, change it to post later
-router.post('/loggedin/citySearch',(req,res)=>{
-    let cityname = req.body.cityName
-    let countryname = req.body.country
+let cityname = ''
+let countryname = ''
 
+router.post('/loggedin/citySearch',(req,res)=>{
+    cityname = req.body.cityName
+    countryname = req.body.country
 
     if(countryname==="Canada"||countryname==="CAN"){
         countryname ="CA"
     }
-
 
     fs.readFile('../public/weatherdata/citylist.json', (err,data)=>{
         if(err){
@@ -50,6 +45,7 @@ router.post('/loggedin/citySearch',(req,res)=>{
             let selected_city=(JSON.parse(data)).filter(i=>i.name===cityname && i.country===countryname)
             //create a CityLoc instance here
             const cityLocation = new CityPoint({
+                name:cityname,
                 'location':{
                     'type':'Point',
                     'coordinates': [selected_city[0].coord.lon,selected_city[0].coord.lat]
@@ -60,6 +56,20 @@ router.post('/loggedin/citySearch',(req,res)=>{
         }
     })
 
+})
+
+router.get('/loggedin/citySearch',async(req,res)=>{
+    let status_check = await CityPoint.findOne({name:cityname})
+    res.json(status_check)
+})
+
+
+
+
+//just for testing purposes
+router.get('/testing',async (req,res)=>{
+    let stored_data = await Users.find()
+    res.json(stored_data)
 })
 
 module.exports=router
