@@ -38,19 +38,14 @@ class UsersPanel extends Component{
                 <div id='container'>
                     <BrowserRouter>
                         <Switch>
-                            <Route exact path = '/'component={MainMenu} />
-                            <Route exact path = '/radar'component={Radar} />
-                            <Route exact path = '/analog'component={Analog} />
+                            <Route exact path = '/userspanel'component={MainMenu} />
+                            <Route path = '/userspanel/radar'component={Radar} />
+                            <Route path = '/userspanel/analog'component={Analog} />
                         </Switch>
                     </BrowserRouter>
                 </div>
             )
         }
-        // return(
-        //     <div>
-        //         <h1>Users Panel</h1>
-        //     </div>
-        // )
     }
 }
 

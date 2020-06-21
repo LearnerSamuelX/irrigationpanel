@@ -6,11 +6,17 @@ class MainMenu extends Component{
 
     render(){
         return(
-            <div>
+            <div id='container'>
                 <h1>Main Menu</h1>
+                <Link to="/userspanel/radar">
+                        <button>Radar</button>
+                </Link>
+                <Link to="/userspanel/analog">
+                        <button>Analog</button>
+                </Link>
             </div>
         )
     }
 }
 
-export default MainMenu
+export default MainMenu;

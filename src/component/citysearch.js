@@ -59,7 +59,7 @@ class CitySearch extends Component{
             console.log(res.data)
         })
 
-        let path = 'usersPanel'
+        let path = 'userspanel'
         this.props.history.push(path);
 
     }
