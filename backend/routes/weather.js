@@ -5,10 +5,12 @@ const CityPoint = require('../models/geoloc')
 
 
 let user_info = ''
+let username = ''
+let password = ''
 
 router.post('/usercreated', async (req,res)=>{
-    const username = req.body.username
-    const password = req.body.password
+    username = req.body.username
+    password = req.body.password
 
     user_info = await new Users({
         username,
@@ -35,22 +37,31 @@ router.post('/loggedin/citySearch',(req,res)=>{
         countryname ="CA"
     }
 
-    fs.readFile('../public/weatherdata/citylist.json', (err,data)=>{
+    fs.readFile('../public/weatherdata/citylist.json', async (err,data)=>{
         if(err){
             console.log(err)
             res.send('Wrong.')
         }else{
-
             user_info.cityName = cityname
+            user_info.countryCode = countryname
+
+            await Users.findOneAndUpdate(
+                {username:user_info.username},
+                {
+                    cityName:cityname,
+                    countryCode:countryname
+                }
+            )
+            
             let selected_city=(JSON.parse(data)).filter(i=>i.name===cityname && i.country===countryname)
             //create a CityLoc instance here
-            const cityLocation = new CityPoint({
+            const cityLocation = await new CityPoint({
                 name:cityname,
                 'location':{
                     'type':'Point',
                     'coordinates': [selected_city[0].coord.lon,selected_city[0].coord.lat]
                 }
-            })
+            }).save()
             console.log(cityLocation)
             res.json(selected_city[0])
         }

@@ -20,6 +20,7 @@ const local_uri = process.env.LOCAL_URI
 
 
 mongoose.connect(local_uri,{useNewUrlParser:true,useCreateIndex:true})
+mongoose.set('useFindAndModify', false);
 
 const db = mongoose.connection
 db.once('open',()=>{

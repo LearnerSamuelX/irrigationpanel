@@ -5,7 +5,7 @@ class CitySearch extends Component{
     constructor(props){
         super(props);
 
-        //initilize method
+        //initilize methods
         this.onChangeCityName = this.onChangeCityName.bind(this)
         this.onChangeCountry = this.onChangeCountry.bind(this)
         this.citySearch = this.citySearch.bind(this)

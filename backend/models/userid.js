@@ -17,6 +17,10 @@ const userInfo = new Schema ({
     cityName:{
         type:String
     },
+
+    countryCode:{
+        type:String
+    }
 })
 
 
