@@ -1,7 +1,9 @@
 const router = require('express').Router();
 const fs = require('fs')
+const fetch = require("node-fetch");
 const Users = require('../models/userid'); //name of the database
 const CityPoint = require('../models/geoloc')
+
 
 
 let user_info = ''
@@ -62,19 +64,43 @@ router.post('/loggedin/citySearch',(req,res)=>{
                     'coordinates': [selected_city[0].coord.lon,selected_city[0].coord.lat]
                 }
             }).save()
-            console.log(cityLocation)
+            // console.log(cityLocation)
             res.json(selected_city[0])
         }
     })
 
 })
 
-router.get('/loggedin/citySearch',async(req,res)=>{
-    let status_check = await CityPoint.findOne({name:cityname})
+let status_check = ""
+router.get('/loggedin/citySearch',(req,res)=>{
+    Users.findOne({
+        username:user_info.username},(err,result)=>{
+            if(err){
+                console.log(err)
+            }else{
+                status_check = result
+                console.log('Success')
+            }
+        })
+    // if(status_check === ""){
+    //     res.send('Please log into the system')
+    // }else{
+    //     let cityname_url=status_check.cityName
+    //     let country_url=status_check.countryCode
+    //     let api_key='2357e9d6edbc1dca9778ffaae19a1bf0'
+    //     let state_url=""
+
+    //     let raw = await fetch(`http://api.openweathermap.org/data/2.5/weather?q=${cityname_url},${country_url}&appid=${api_key}`)
+    //     let weather_data = await raw.json();
+
+    // }
+    console.log(user_info.username)
+    console.log(cityname)
+    console.log(status_check)
     res.json(status_check)
 })
 
-
+router 
 
 
 //just for testing purposes
