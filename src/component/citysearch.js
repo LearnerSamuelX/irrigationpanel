@@ -15,20 +15,23 @@ class CitySearch extends Component{
             username:"",
             cityName:"",
             country:"",
+            loaded:false
         }
     }
 
     componentDidMount(){
         axios.get('http://localhost:5000/weather/loggedin').then((res)=>{
-
-            if(res.data===null){
+            if(res.data==="Error"){
+                console.log('hahaha'+res)
                 this.setState({
-                    username:""
+                    username:"Error",
+                    loaded:true
                 })
             }else{
                 console.log(res.data)
                 this.setState({
-                    username:res.data.username
+                    username:res.data.username,
+                    loaded:true
                 })
             }
         })
@@ -65,10 +68,16 @@ class CitySearch extends Component{
     }
 
     render(){ 
-        if(this.state.username===""){
+        if(this.state.username===""&&this.state.loaded===false){
             return(
                 <div>
-                    <p>Please Login to the System</p>
+                    <p>Loading Data</p>
+                </div>
+            )
+        }else if(this.state.username==="Error"&&this.state.loaded===true){
+            return(
+                <div>
+                    <h3>Please login into the system first</h3>
                 </div>
             )
         }else{

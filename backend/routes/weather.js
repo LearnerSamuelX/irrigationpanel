@@ -6,27 +6,44 @@ const CityPoint = require('../models/geoloc')
 
 
 
-let user_info = ''
-let username = ''
-let password = ''
+let user_info = ""
+let username = ""
+let password = ""
+let loggedin_user=""
 
 router.post('/usercreated', async (req,res)=>{
-    username = req.body.username
-    password = req.body.password
+    setTimeout(async()=>{
+        username = req.body.username
+        password = req.body.password
+        user_info = await new Users({
+            username,
+            password
+        }).save()
+        res.json(user_info)
+    },500)
+})
 
-    user_info = await new Users({
-        username,
-        password
-    }).save()
-
+//login validation, followed by 'loggedin/citySearch' get request
+router.post('/loggedin',async(req,res)=>{
+    const username = req.body.username_2
+    const password = req.body.password_2
+    user_info = await Users.findOne({
+        username:username,
+        password:password
+    })
     res.json(user_info)
 })
 
 router.get('/loggedin',(req,res)=>{
-    setTimeout(async()=>{    
-        let user_selected = await Users.findOne({username:user_info.username})
-        res.json(user_selected)
-    },25)
+    setTimeout(async()=>{
+        if (user_info===""){
+            loggedin_user="Error"
+            res.json(loggedin_user)
+        }else{     
+            loggedin_user = await Users.findOne({username:user_info.username})
+            res.json(loggedin_user)      
+        }
+    },500)
 })
 
 //use get for now, change it to post later
@@ -58,7 +75,6 @@ router.post('/loggedin/citySearch',(req,res)=>{
             )
             
             let selected_city=(JSON.parse(data)).filter(i=>i.name===cityname && i.country===countryname)
-            //create a CityLoc instance here
             const cityLocation = await new CityPoint({
                 name:cityname,
                 'location':{
@@ -66,8 +82,6 @@ router.post('/loggedin/citySearch',(req,res)=>{
                     'coordinates': [selected_city[0].coord.lon,selected_city[0].coord.lat]
                 }
             }).save()
-            console.log('Post request\n'+user_info)
-            console.log(cityLocation)
             res.json(selected_city[0])
         }
     })
@@ -77,17 +91,19 @@ router.post('/loggedin/citySearch',(req,res)=>{
 let status_check = ""
 let weather_data=""
 router.get('/loggedin/citySearch',(req,res)=>{
-    //how come when passing multiple conditions, it returns null
-    //i guess it has something to do with asynchronous delay
     weather_data = "loading"
     setTimeout(()=>{
+        if(user_info===null){
+            res.json('Error')
+        }else{
         Users.findOne({username:user_info.username},async(err,result)=>{
                 if(err){
                     console.log(err)
                 }else{
                     status_check = result
-                    if (status_check===""){
-                        res.send('Please log into the system')
+                    if (status_check===null){
+                        weather_data = 'Error'
+                        res.json(weather_data)
                     }else{
                         let cityname_url=status_check.cityName
                         let country_url=status_check.countryCode
@@ -95,15 +111,14 @@ router.get('/loggedin/citySearch',(req,res)=>{
                         let state_url=""
                         let raw = await fetch(`http://api.openweathermap.org/data/2.5/weather?q=${cityname_url},${country_url}&appid=${api_key}`)
                         weather_data = await raw.json();
-                        console.log(weather_data)
+                        // console.log(weather_data)
                         res.json(weather_data)
                     }
                 }
             })
+        }
     },250)
 })
-
-router 
 
 
 //just for testing purposes

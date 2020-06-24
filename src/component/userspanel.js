@@ -14,7 +14,7 @@ class UsersPanel extends Component{
 
         this.state = {
             weatherdata:"",
-            loading:true
+            loaded:false
         }
     }
 
@@ -23,26 +23,25 @@ class UsersPanel extends Component{
             console.log(res.data)
             this.setState({
                 weatherdata:res.data, //this page is the data source for both weather and analog pages
-                loading:false
+                loaded:true
             })
         })
     }
 
     render(){
-        if(this.state.loading===true){
+        if(this.state.loaded===false&&this.state.weatherdata===""){
             return(
                 <div>
                     <h3>Loading data</h3>
                 </div>
             )
-        }else if(this.state.loading==='loading'){
+        }else if(this.state.loaded===true&&this.state.weatherdata==='Error'){
             return(
                 <div>
-                    <h3>Loading</h3>
+                    <h3>Please Log into the System</h3>
                 </div>
             )
-        }
-        else{
+        }else{
             return(
                 <div id='container'>
                     <BrowserRouter>
