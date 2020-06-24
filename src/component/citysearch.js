@@ -14,7 +14,7 @@ class CitySearch extends Component{
         this.state={
             username:"",
             cityName:"",
-            country:""
+            country:"",
         }
     }
 

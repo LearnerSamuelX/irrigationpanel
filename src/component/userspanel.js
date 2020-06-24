@@ -13,34 +13,43 @@ class UsersPanel extends Component{
         super(props)
 
         this.state = {
-            username:"",
-            cityname:""
+            weatherdata:"",
+            loading:true
         }
     }
 
     componentDidMount(){
         axios.get('http://localhost:5000/weather/loggedin/citySearch').then((res)=>{
+            console.log(res.data)
             this.setState({
-                cityname:res.data
+                weatherdata:res.data, //this page is the data source for both weather and analog pages
+                loading:false
             })
         })
     }
 
     render(){
-        if(this.state.cityname===""){
+        if(this.state.loading===true){
             return(
                 <div>
-                    <p>Please Login into the System First</p>
+                    <h3>Loading data</h3>
                 </div>
             )
-        }else{
+        }else if(this.state.loading==='loading'){
+            return(
+                <div>
+                    <h3>Loading</h3>
+                </div>
+            )
+        }
+        else{
             return(
                 <div id='container'>
                     <BrowserRouter>
                         <Switch>
-                            <Route exact path = '/userspanel'component={MainMenu} />
+                            <Route exact path = '/userspanel'component={MainMenu}/>
                             <Route path = '/userspanel/radar'component={Radar} />
-                            <Route path = '/userspanel/analog'component={Analog} />
+                            <Route path = '/userspanel/analog'component={Analog} datasource={this.state.weatherdata}/>
                         </Switch>
                     </BrowserRouter>
                 </div>
