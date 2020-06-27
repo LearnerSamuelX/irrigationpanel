@@ -1,0 +1,21 @@
+body{
+    text-align: center;
+}
+
+.page-title{
+    text-align: center;
+}
+
+.dashboard-collection{
+    margin-top:3rem;
+    width:55rem;
+    display:flex;
+    flex-direction:row;
+    margin-left:auto;
+    margin-right:auto;
+}
+
+.dashboard-collection>div {
+    margin-left:auto;
+    margin-right:auto;
+}

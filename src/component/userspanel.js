@@ -22,7 +22,7 @@ class UsersPanel extends Component{
         axios.get('http://localhost:5000/weather/loggedin/citySearch').then((res)=>{
             console.log(res.data)
             this.setState({
-                weatherdata:res.data, //this page is the data source for both weather and analog pages
+                weatherdata:res.data, //T, humidity, windspeed, wind-direction
                 loaded:true
             })
         })
@@ -48,7 +48,11 @@ class UsersPanel extends Component{
                         <Switch>
                             <Route exact path = '/userspanel'component={MainMenu}/>
                             <Route path = '/userspanel/radar'component={Radar} />
-                            <Route path = '/userspanel/analog'component={Analog} datasource={this.state.weatherdata}/>
+                            <Route path = '/userspanel/analog'>
+                                <Analog datasource={this.state.weatherdata} />
+                                <Radar datasource={this.state.weatherdata} />
+                            </Route>
+                            {/* in the component  */}
                         </Switch>
                     </BrowserRouter>
                 </div>
