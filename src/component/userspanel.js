@@ -6,6 +6,8 @@ import MainMenu from "../component/userpanel/mainmenu"
 import Radar from "../component/userpanel/radar"
 import Analog from "../component/userpanel/analog"
 
+import '../stylessheet/userspanel.css'
+
 //Any state we need in here? 
 //Let it just be a new navigation page, and put the states in the child branch pages
 class UsersPanel extends Component{
@@ -44,13 +46,19 @@ class UsersPanel extends Component{
         }else{
             return(
                 <div id='container'>
+                    <div className='location'>
+                        <h3>Location: {this.state.weatherdata.name},{this.state.weatherdata.sys.country}</h3>
+                    </div>
                     <BrowserRouter>
                         <Switch>
-                            <Route exact path = '/userspanel'component={MainMenu}/>
-                            <Route path = '/userspanel/radar'component={Radar} />
+                            <Route exact path = '/userspanel'>
+                                <MainMenu datasource={this.state.weatherdata}/>
+                            </Route>
+                            <Route path = '/userspanel/radar'>
+                                <Radar datasource={this.state.weatherdata} />
+                            </Route>
                             <Route path = '/userspanel/analog'>
                                 <Analog datasource={this.state.weatherdata} />
-                                <Radar datasource={this.state.weatherdata} />
                             </Route>
                             {/* in the component  */}
                         </Switch>

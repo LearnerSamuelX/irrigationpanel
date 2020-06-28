@@ -2,6 +2,16 @@ import React, { Component } from 'react';
 import { BrowserRouter as Router,Route,Link,Switch, BrowserRouter} from "react-router-dom" ;
 
 class MainMenu extends Component{
+    constructor(props){
+        super(props)
+    
+
+        this.state={
+            cityname:"",
+            countryname:"",
+        }
+    
+    }
 
     render(){
         return(

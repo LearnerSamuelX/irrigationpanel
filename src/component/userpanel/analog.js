@@ -21,7 +21,7 @@ class Analog extends Component {
 
     render(){
         return(
-            <div>
+            <div className='analog-page'>
                 <h1 className='page-title'>Analog Weather Dashboard</h1>
                 <div className='dashboard-collection'>
                     <div>
@@ -34,7 +34,6 @@ class Analog extends Component {
                         <Dashboard nominal={this.state.windspeed} range={[0,50]} unit={'km'} title={'Windspeed'}/>
                     </div>
                 </div>
-
             </div>
         )
     }
