@@ -40,13 +40,16 @@ componentDidMount(){
         let x_2 = x_new + 10*increment
         let y_2 = y_new + 10*increment
 
-        let x_3 = x_new - 10*increment
+        let x_3 = x_new
         let y_3 = y_new - 10*increment
 
-        let x_4 = x_new + 10*increment
-        let y_4 = y_new - 10*increment
+        // let x_4 = x_new + 10*increment
+        // let y_4 = y_new - 10*increment
 
         //top 1 2 bottom 3 4 from left --> right
+        console.log(x_1,y_1)
+        console.log(x_2,y_2)
+        console.log(x_3,y_3)
 
 
     }else if(angle>180||angle<270){
