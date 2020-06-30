@@ -88,6 +88,7 @@ router.post('/loggedin/citySearch',(req,res)=>{
 
 })
 
+
 let status_check = ""
 let weather_data=""
 router.get('/loggedin/citySearch',(req,res)=>{
@@ -118,6 +119,66 @@ router.get('/loggedin/citySearch',(req,res)=>{
             })
         }
     },250)
+})
+
+let city_pool = [ ]
+let weather_pool = []
+router.get('/radar',(req,res)=>{
+    let x_point = weather_data.coord.lon
+    let y_point = weather_data.coord.lat
+    let wind_deg = weather_data.wind.deg
+
+    let radar_range = 50  //unit in km
+    let x_d = 0
+    let y_d = 0
+    let increment=0.00899321 //increment value of degree change for lon & lat
+
+    x_d=radar_range*Math.abs(Math.cos(Math.PI/180*wind_deg))
+    y_d=radar_range*Math.abs(Math.sin(Math.PI/180*wind_deg))
+
+    let x_new = x_point - x_d*increment
+    let y_new = y_point + y_d*increment
+
+    let half_width = 15
+
+    let x_1 = x_new - half_width*increment
+    let y_1 = y_new + half_width*increment
+        
+    let x_2 = x_new + half_width*increment
+    let y_2 = y_new + half_width*increment
+
+    let x_3 = x_new + half_width*increment
+    let y_3 = y_new - half_width*increment
+
+    let x_m = x_new
+    let y_m = y_new - half_width*increment
+
+    fs.readFile('../public/weatherdata/citylist.json',(err,data)=>{
+        if(err){
+            console.log(err)
+        }else{
+                city_pool = (JSON.parse(data)).filter(i=>
+                i.coord.lon>=x_1&&i.coord.lat<=y_1&&i.coord.lon<=x_3&&i.coord.lat>=y_3
+            )
+            // console.log(city_pool)
+        }
+    })
+
+    setTimeout(()=>{
+        city_pool.forEach(async(j)=>{
+            let cityname = j.name
+            let countryname = j.country
+            let api_key='2357e9d6edbc1dca9778ffaae19a1bf0'
+            let raw = await fetch(`http://api.openweathermap.org/data/2.5/weather?q=${cityname},${countryname}&appid=${api_key}`)
+            let data = await raw.json()
+            weather_pool.push(data)
+        })
+    },1000) //testing
+
+    setTimeout(()=>{
+        console.log(weather_pool)
+        res.json(weather_data)
+    },2500)
 })
 
 
