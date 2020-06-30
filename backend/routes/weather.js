@@ -3,7 +3,7 @@ const fs = require('fs')
 const fetch = require("node-fetch");
 const Users = require('../models/userid'); //name of the database
 const CityPoint = require('../models/geoloc')
-
+const RadarCity = require('../models/radar')
 
 
 let user_info = ""
@@ -121,8 +121,9 @@ router.get('/loggedin/citySearch',(req,res)=>{
     },250)
 })
 
-let city_pool = [ ]
+let city_pool = []
 let weather_pool = []
+let radar_cities = []
 router.get('/radar',(req,res)=>{
     let x_point = weather_data.coord.lon
     let y_point = weather_data.coord.lat
@@ -133,11 +134,36 @@ router.get('/radar',(req,res)=>{
     let y_d = 0
     let increment=0.00899321 //increment value of degree change for lon & lat
 
-    x_d=radar_range*Math.abs(Math.cos(Math.PI/180*wind_deg))
-    y_d=radar_range*Math.abs(Math.sin(Math.PI/180*wind_deg))
+    let x_new = 0
+    let y_new = 0 
 
-    let x_new = x_point - x_d*increment
-    let y_new = y_point + y_d*increment
+    x_d=radar_range*Math.abs(Math.sin(wind_deg*Math.PI/180))
+    y_d=radar_range*Math.abs(Math.cos(wind_deg*Math.PI/180))
+
+    if(wind_deg>=0&&wind_deg<90){
+        x_d=radar_range*Math.abs(Math.sin(wind_deg*Math.PI/180))
+        y_d=radar_range*Math.abs(Math.cos(wind_deg*Math.PI/180))
+        x_new = x_point + x_d*increment
+        y_new = y_point + y_d*increment
+    }else if(wind_deg>=90 && wind_deg<180){
+        x_d=radar_range*Math.abs(Math.cos(wind_deg*Math.PI/180))
+        y_d=radar_range*Math.abs(Math.sin(wind_deg*Math.PI/180))
+        x_new = x_point + x_d*increment
+        y_new = y_point - y_d*increment
+    }else if(wind_deg>=180 && wind_deg<270){
+        x_d=radar_range*Math.abs(Math.sin(wind_deg*Math.PI/180))
+        y_d=radar_range*Math.abs(Math.cos(wind_deg*Math.PI/180))
+        x_new = x_point - x_d*increment
+        y_new = y_point - y_d*increment
+    }else{
+        x_d=radar_range*Math.abs(Math.cos(wind_deg*Math.PI/180))
+        y_d=radar_range*Math.abs(Math.sin(wind_deg*Math.PI/180))
+        x_new = x_point - x_d*increment
+        y_new = y_point + y_d*increment
+    }
+
+    console.log(x_new)
+    console.log(y_new)
 
     let half_width = 15
 
@@ -176,7 +202,7 @@ router.get('/radar',(req,res)=>{
     },1000) //testing
 
     setTimeout(()=>{
-        console.log(weather_pool)
+        console.log(city_pool)
         res.json(weather_data)
     },2500)
 })
