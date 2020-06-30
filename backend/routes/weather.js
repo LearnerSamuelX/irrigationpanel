@@ -123,7 +123,6 @@ router.get('/loggedin/citySearch',(req,res)=>{
 
 let city_pool = []
 let weather_pool = []
-let radar_cities = []
 router.get('/radar',(req,res)=>{
     let x_point = weather_data.coord.lon
     let y_point = weather_data.coord.lat
@@ -165,7 +164,7 @@ router.get('/radar',(req,res)=>{
     console.log(x_new)
     console.log(y_new)
 
-    let half_width = 15
+    let half_width = 20
 
     let x_1 = x_new - half_width*increment
     let y_1 = y_new + half_width*increment

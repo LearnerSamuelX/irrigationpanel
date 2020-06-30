@@ -18,7 +18,7 @@ app.use('/weather',weatherRoute)
 const atlas_uri = process.env.ATLAS_URI  //use local library for now
 const local_uri = process.env.LOCAL_URI
 
-mongoose.connect(local_uri,{useNewUrlParser:true,useCreateIndex:true})
+mongoose.connect(atlas_uri,{useNewUrlParser:true,useCreateIndex:true})
 mongoose.set('useFindAndModify', false);
 
 const db = mongoose.connection
