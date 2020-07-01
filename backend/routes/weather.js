@@ -175,6 +175,9 @@ router.get('/radar',(req,res)=>{
     let x_3 = x_new + half_width*increment
     let y_3 = y_new - half_width*increment
 
+    let x_4 = x_new - half_width*increment
+    let y_4 = y_new - half_width*increment
+
     let x_m = x_new
     let y_m = y_new - half_width*increment
 
@@ -200,7 +203,15 @@ router.get('/radar',(req,res)=>{
         })
     },1000) //testing
 
+    let rain_counter = 0
     setTimeout(()=>{
+        //implement probablity calculation here
+        weather_pool.forEach((k)=>{
+            if(k.weather.main==='Rain'){
+                rain_counter = rain_counter + 1
+            }
+        })
+        console.log(rain_counter/weather_pool.length)
         console.log(city_pool)
         res.json(weather_data)
     },2500)
