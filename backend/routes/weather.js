@@ -123,12 +123,13 @@ router.get('/loggedin/citySearch',(req,res)=>{
 
 let city_pool = []
 let weather_pool = []
+let city_weather_pool  = []
 router.get('/radar',(req,res)=>{
     let x_point = weather_data.coord.lon
     let y_point = weather_data.coord.lat
     let wind_deg = weather_data.wind.deg
 
-    let radar_range = 50  //unit in km
+    let radar_range = 150  //unit in km
     let x_d = 0
     let y_d = 0
     let increment=0.00899321 //increment value of degree change for lon & lat
@@ -145,24 +146,25 @@ router.get('/radar',(req,res)=>{
         x_new = x_point + x_d*increment
         y_new = y_point + y_d*increment
     }else if(wind_deg>=90 && wind_deg<180){
-        x_d=radar_range*Math.abs(Math.cos(wind_deg*Math.PI/180))
-        y_d=radar_range*Math.abs(Math.sin(wind_deg*Math.PI/180))
+        x_d=radar_range*Math.abs(Math.cos((wind_deg-90)*Math.PI/180))
+        y_d=radar_range*Math.abs(Math.sin((wind_deg-90)*Math.PI/180))
         x_new = x_point + x_d*increment
         y_new = y_point - y_d*increment
     }else if(wind_deg>=180 && wind_deg<270){
-        x_d=radar_range*Math.abs(Math.sin(wind_deg*Math.PI/180))
-        y_d=radar_range*Math.abs(Math.cos(wind_deg*Math.PI/180))
+        x_d=radar_range*Math.abs(Math.sin((wind_deg-180)*Math.PI/180))
+        y_d=radar_range*Math.abs(Math.cos((wind_deg-180)*Math.PI/180))
         x_new = x_point - x_d*increment
         y_new = y_point - y_d*increment
-    }else{
-        x_d=radar_range*Math.abs(Math.cos(wind_deg*Math.PI/180))
-        y_d=radar_range*Math.abs(Math.sin(wind_deg*Math.PI/180))
+    }else if(wind_deg>270 && wind_deg<360){
+        x_d=radar_range*Math.abs(Math.cos((wind_deg-270)*Math.PI/180))
+        y_d=radar_range*Math.abs(Math.sin((wind_deg-270)*Math.PI/180))
         x_new = x_point - x_d*increment
         y_new = y_point + y_d*increment
     }
 
-    console.log(x_new)
-    console.log(y_new)
+    // coordinates of the reference point
+    // console.log(x_new)
+    // console.log(y_new)
 
     let half_width = 20
 
@@ -203,6 +205,20 @@ router.get('/radar',(req,res)=>{
         })
     },1000) //testing
 
+    setTimeout(()=>{
+        weather_pool.forEach(async (n)=>{
+            let reference_point = await RadarCity({
+                name:n.name,
+                'location':{
+                    'type':'Point',
+                    'coordinates': [n.coord.lon,n.coord.lat]
+                },
+                weather:n.weather[0].main
+            }).save()
+            city_weather_pool.push(reference_point)
+        })
+    },2500)
+
     let rain_counter = 0
     setTimeout(()=>{
         //implement probablity calculation here
@@ -211,8 +227,8 @@ router.get('/radar',(req,res)=>{
                 rain_counter = rain_counter + 1
             }
         })
-        console.log(rain_counter/weather_pool.length)
-        console.log(city_pool)
+        console.log('Rain Probability is: '+ rain_counter/weather_pool.length)
+        console.log(city_weather_pool)
         res.json(weather_data)
     },2500)
 })

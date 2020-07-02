@@ -22,7 +22,7 @@ class UsersPanel extends Component{
 
     componentDidMount(){
         axios.get('http://localhost:5000/weather/loggedin/citySearch').then((res)=>{
-            console.log(res.data)
+            // console.log(res.data)
             this.setState({
                 weatherdata:res.data, //T, humidity, windspeed, wind-direction
                 loaded:true
