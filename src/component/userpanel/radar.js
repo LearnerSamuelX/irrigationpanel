@@ -1,10 +1,11 @@
-import React, { Component } from 'react';
+import React, { Component,createRef } from 'react';
 import axios from 'axios';
 
 class Radar extends Component{
     constructor(props){
         super(props)
         //initialize methods here
+        this.googleMap = this.React.createRef()
 
         //define states here
         this.state = {

@@ -28,6 +28,7 @@ class UsersPanel extends Component{
                 loaded:true
             })
         })
+        
     }
 
     render(){
