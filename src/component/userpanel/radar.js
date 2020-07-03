@@ -1,11 +1,13 @@
 import React, { Component,createRef } from 'react';
 import axios from 'axios';
 
+require('dotenv').config();
+
 class Radar extends Component{
     constructor(props){
         super(props)
         //initialize methods here
-        this.googleMap = this.React.createRef()
+        this.googleMap = React.createRef()
 
         //define states here
         this.state = {
@@ -17,8 +19,21 @@ class Radar extends Component{
 
 componentDidMount(){
     axios.get('http://localhost:5000/weather/radar')
+
+    const MapCode = document.createElement('script')
+    MapCode.src =`https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap`
+    window.document.body.appendChild(MapCode)
+
+    MapCode.addEventListener('load', ()=>{
+        this.googleMap = this.createGoogleMap()
+        // this.marker = this.createMarker()
+        // this.line = this.drawLine()
+    })
 }
 
+createGoogleMap = ()=>{
+    console.log('Testing')
+}
     
     render(){
         return(

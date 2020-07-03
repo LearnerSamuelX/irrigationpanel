@@ -5,8 +5,8 @@ class Logincomponent extends Component{
     constructor(props){
         super(props);
         //initialize method here methods here
-        this.onChangeUsername = this.onChangeUsername.bind(this);
-        this.onChangePassword = this.onChangePassword.bind(this);
+        this.onChangeUsername_JSX = this.onChangeUsername.bind(this);
+        this.onChangePassword_JSX= this.onChangePassword.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
 
         // define states here
@@ -53,9 +53,9 @@ class Logincomponent extends Component{
             <div>
                 <form id='login-container'>
                     <label>Username:</label>
-                    <input type='text'value={this.state.username} onChange={this.onChangeUsername}></input>
+                    <input type='text'value={this.state.username} onChange={this.onChangeUsername_JSX}></input>
                     <label>Password:</label>
-                    <input type='password'value={this.state.password} onChange={this.onChangePassword}></input>
+                    <input type='password'value={this.state.password} onChange={this.onChangePassword_JSX}></input>
                     <button onClick={this.onSubmit}>Login</button>
                 </form>
             </div>
