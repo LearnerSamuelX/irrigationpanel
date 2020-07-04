@@ -21,19 +21,20 @@ componentDidMount(){
     axios.get('http://localhost:5000/weather/radar')
 
     const MapCode = document.createElement('script')
-    MapCode.src =`https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap`
+    MapCode.src =`https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GOOGLE_MAPS_API_KEY}`
     window.document.body.appendChild(MapCode)
 
     MapCode.addEventListener('load', ()=>{
-        this.googleMap = this.createGoogleMap()
-        // this.marker = this.createMarker()
-        // this.line = this.drawLine()
+        this.createGoogleMap()
     })
-    console.log('Testing '+process.env.REACT_APP_GOOGLE_MAPS_API_KEY)
 }
 
 createGoogleMap = ()=>{
-    console.log('Testing')
+    new window.google.maps.Map(this.googleMap.current,{
+        zoom: 8,
+        center: { lat: -34.397, lng: 150.644 },
+      disableDefaultUI: true,
+    })
 }
     
     render(){
@@ -43,7 +44,8 @@ createGoogleMap = ()=>{
                 <p>City Name: {this.state.cityname}</p>
                 <p>City Coordinates:Lon: {this.state.cityCoordinates[0]}, Lat: {this.state.cityCoordinates[1]}</p>
                 <p>Wind Direction: {this.state.winddirection}˚ </p>
-                <p>Selected Cities: * Write a query, setup the range, greater or less than the chosen city's coordinates *</p> 
+                <p>Selected Cities: * Write a query, setup the range, greater or less than the chosen city's coordinates *</p>
+                <div id="google-map" ref={this.googleMap} style={{ width: '400px', height: '300px' }} />
             </div>
         )
     }
