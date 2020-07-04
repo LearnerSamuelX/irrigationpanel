@@ -29,6 +29,7 @@ componentDidMount(){
         // this.marker = this.createMarker()
         // this.line = this.drawLine()
     })
+    console.log('Testing '+process.env.REACT_APP_GOOGLE_MAPS_API_KEY)
 }
 
 createGoogleMap = ()=>{

@@ -11,6 +11,8 @@ let username = ""
 let password = ""
 let loggedin_user=""
 
+require('dotenv').config();
+
 router.post('/usercreated', async (req,res)=>{
     setTimeout(async()=>{
         username = req.body.username
@@ -108,9 +110,9 @@ router.get('/loggedin/citySearch',(req,res)=>{
                     }else{
                         let cityname_url=status_check.cityName
                         let country_url=status_check.countryCode
-                        let api_key='2357e9d6edbc1dca9778ffaae19a1bf0'
+                        // let api_key='2357e9d6edbc1dca9778ffaae19a1bf0'
                         let state_url=""
-                        let raw = await fetch(`http://api.openweathermap.org/data/2.5/weather?q=${cityname_url},${country_url}&appid=${api_key}`)
+                        let raw = await fetch(`http://api.openweathermap.org/data/2.5/weather?q=${cityname_url},${country_url}&appid=${process.env.API_KEY}`)
                         weather_data = await raw.json();
                         // console.log(weather_data)
                         res.json(weather_data)

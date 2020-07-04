@@ -41,7 +41,6 @@ class Logincomponent extends Component{
                 axios.post('http://localhost:5000/weather/loggedin',user_info).then((res)=>{
                     console.log(res.data)
                 })
-                
                 let path ='userspanel'
                 this.props.history.push(path);
             }
