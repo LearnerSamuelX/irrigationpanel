@@ -18,7 +18,11 @@ class Radar extends Component{
 }
 
 componentDidMount(){
-    axios.get('http://localhost:5000/weather/radar')
+    axios.get('http://localhost:5000/weather/radar').then((res)=>{
+        console.log(res.data)
+    })
+
+    console.log(this.state.cityCoordinates)
 
     const MapCode = document.createElement('script')
     MapCode.src =`https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GOOGLE_MAPS_API_KEY}`
@@ -32,7 +36,7 @@ componentDidMount(){
 createGoogleMap = ()=>{
     new window.google.maps.Map(this.googleMap.current,{
         zoom: 8,
-        center: { lat: -34.397, lng: 150.644 },
+        center:{ lat: this.state.cityCoordinates[1], lng:this.state.cityCoordinates[0] },
       disableDefaultUI: true,
     })
 }
