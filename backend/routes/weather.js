@@ -126,7 +126,9 @@ router.get('/loggedin/citySearch',(req,res)=>{
 let city_pool = []
 let weather_pool = []
 let city_weather_pool  = []
+
 router.get('/radar',(req,res)=>{
+
     let x_point = weather_data.coord.lon
     let y_point = weather_data.coord.lat
     let wind_deg = weather_data.wind.deg
@@ -196,6 +198,8 @@ router.get('/radar',(req,res)=>{
         }
     })
 
+    weather_pool = [ ]
+    city_weather_pool = [ ]
     setTimeout(()=>{
         city_pool.forEach(async(j)=>{
             let cityname = j.name
@@ -230,9 +234,9 @@ router.get('/radar',(req,res)=>{
             }
         })
         console.log('Rain Probability is: '+ rain_counter/weather_pool.length)
-        console.log(city_weather_pool)
-        res.json(weather_data)
-    },2500)
+        console.log(city_pool)
+        res.json(city_weather_pool)
+    },3500)
 })
 
 
