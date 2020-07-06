@@ -58,9 +58,9 @@ class CitySearch extends Component{
 
         
         axios.post('http://localhost:5000/weather/loggedin/citySearch',searchCity)
-        .then((res)=>{
-            console.log(res.data)
-        })
+        // .then((res)=>{
+        //     console.log(res.data)
+        // })
 
         let path = 'userspanel'
         this.props.history.push(path);
