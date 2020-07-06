@@ -14,7 +14,8 @@ class Radar extends Component{
             cityname:this.props.datasource.name,
             cityCoordinates:[this.props.datasource.coord.lon, this.props.datasource.coord.lat],
             winddirection:this.props.datasource.wind.deg,
-            cityPool:[]
+            cityPool:[],
+            borderLine:[]
         }
 }
 
@@ -26,6 +27,11 @@ componentDidMount(){
         })
     })
 
+    axios.get('http://localhost:5000/weather/radar_2').then((res)=>{
+        this.setState({
+            borderLine:res.data
+        })
+    })
     // console.log(this.state.cityCoordinates)
 
     const MapCode = document.createElement('script')
@@ -33,11 +39,12 @@ componentDidMount(){
     window.document.body.appendChild(MapCode)
 
     MapCode.addEventListener('load', ()=>{
-        this.initMap()
+        this.map_1 = this.initMap()
+
         this.targetedCityMarker()
         setTimeout(()=>{
             this.cityPoolPolyLine()
-        },3000)
+        },4000)
     })
 }
 
@@ -52,7 +59,7 @@ initMap(){
 targetedCityMarker(){
     new window.google.maps.Marker({
         position: { lat: this.state.cityCoordinates[1], lng:this.state.cityCoordinates[0] },
-        map:this.initMap(),
+        map:this.map_1
     })
 }
 
@@ -62,7 +69,17 @@ cityPoolPolyLine(){
         citypool_coordinates.push(i.location)
         return citypool_coordinates
     })
-    console.log(citypool_coordinates)
+    console.log(this.state.borderLine)   //coordinates for creating border line
+    console.log(citypool_coordinates)    //coordinates of the cities in the city pool
+
+    new window.google.maps.Polyline({
+        path: this.state.borderLine,
+        geodesic: true,
+        strokeColor: "#FF0000",
+        strokeOpacity: 1.0,
+        strokeWeight: 2,
+        map:this.map_1
+      });
 }
     
     render(){

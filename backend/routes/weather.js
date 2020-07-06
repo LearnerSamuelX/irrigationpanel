@@ -127,6 +127,15 @@ let city_pool = []
 let weather_pool = []
 let city_weather_pool  = []
 
+let x_1 = 0
+let x_2 = 0
+let x_3 = 0 
+let x_4 = 0
+let y_1 = 0
+let y_2 = 0
+let y_3 = 0 
+let y_4 = 0
+
 router.get('/radar',(req,res)=>{
 
     let x_point = weather_data.coord.lon
@@ -172,17 +181,17 @@ router.get('/radar',(req,res)=>{
 
     let half_width = 20
 
-    let x_1 = x_new - half_width*increment
-    let y_1 = y_new + half_width*increment
+    x_1 = x_new - half_width*increment
+    y_1 = y_new + half_width*increment
         
-    let x_2 = x_new + half_width*increment
-    let y_2 = y_new + half_width*increment
+    x_2 = x_new + half_width*increment
+    y_2 = y_new + half_width*increment
 
-    let x_3 = x_new + half_width*increment
-    let y_3 = y_new - half_width*increment
+    x_3 = x_new + half_width*increment
+    y_3 = y_new - half_width*increment
 
-    let x_4 = x_new - half_width*increment
-    let y_4 = y_new - half_width*increment
+    x_4 = x_new - half_width*increment
+    y_4 = y_new - half_width*increment
 
     let x_m = x_new
     let y_m = y_new - half_width*increment
@@ -236,9 +245,38 @@ router.get('/radar',(req,res)=>{
         console.log('Rain Probability is: '+ rain_counter/weather_pool.length)
         console.log(city_pool)
         res.json(city_weather_pool)
-    },3500)
+    },4000)
 })
 
+
+router.get('/radar_2',(req,res)=>{
+    setTimeout(()=>{
+        let polyLineCoordinates = [
+            {
+                lat:y_1,
+                lng:x_1
+            },
+            
+            {
+                lat:y_2,
+                lng:x_2
+            },
+            {
+                lat:y_3,
+                lng:x_3
+            },
+            {
+                lat:y_4,
+                lng:x_4
+            },
+            {
+                lat:y_1,
+                lng:x_1
+            }
+        ]
+        res.json(polyLineCoordinates)
+    },3000)
+})
 
 //just for testing purposes
 router.get('/testing',async (req,res)=>{
