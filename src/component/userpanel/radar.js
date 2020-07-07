@@ -19,6 +19,41 @@ class Radar extends Component{
         }
 }
 
+initMap(){
+    return new window.google.maps.Map(this.googleMap.current,{
+        zoom: 7.5,
+        center:{ lat: this.state.cityCoordinates[1], lng:this.state.cityCoordinates[0] }, //reposition the centre
+      disableDefaultUI: true,
+    })
+}
+
+targetedCityMarker(){
+    new window.google.maps.Marker({
+        position: { lat: this.state.cityCoordinates[1], lng:this.state.cityCoordinates[0] },
+        map:this.map_1
+    })
+}
+
+cityPoolPolyLine(){
+    let citypool_coordinates=[]
+    this.state.cityPool.map((i)=>{
+        citypool_coordinates.push(i.location)
+        return citypool_coordinates
+    })
+
+    console.log(this.state.borderLine)   //coordinates for creating border line
+    console.log(citypool_coordinates)    //coordinates of the cities in the city pool
+
+    new window.google.maps.Polyline({
+        path: this.state.borderLine,
+        geodesic: true,
+        strokeColor: "#2AA181",
+        strokeOpacity: 1.0,
+        strokeWeight: 2,
+        map:this.map_1
+      });
+}
+
 componentDidMount(){
     axios.get('http://localhost:5000/weather/radar').then((res)=>{
         console.log(res.data)
@@ -37,49 +72,16 @@ componentDidMount(){
     const MapCode = document.createElement('script')
     MapCode.src =`https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GOOGLE_MAPS_API_KEY}&libraries=&v=weekly`
     window.document.body.appendChild(MapCode)
+    
 
     MapCode.addEventListener('load', ()=>{
         this.map_1 = this.initMap()
-
-        this.targetedCityMarker()
+        this.targetedCity = this.targetedCityMarker()
         setTimeout(()=>{
-            this.cityPoolPolyLine()
+            this.predicting_region = this.cityPoolPolyLine()
         },4000)
     })
-}
 
-initMap(){
-    return new window.google.maps.Map(this.googleMap.current,{
-        zoom: 7.5,
-        center:{ lat: this.state.cityCoordinates[1], lng:this.state.cityCoordinates[0] },
-      disableDefaultUI: true,
-    })
-}
-
-targetedCityMarker(){
-    new window.google.maps.Marker({
-        position: { lat: this.state.cityCoordinates[1], lng:this.state.cityCoordinates[0] },
-        map:this.map_1
-    })
-}
-
-cityPoolPolyLine(){
-    let citypool_coordinates=[]
-    this.state.cityPool.map((i)=>{
-        citypool_coordinates.push(i.location)
-        return citypool_coordinates
-    })
-    console.log(this.state.borderLine)   //coordinates for creating border line
-    console.log(citypool_coordinates)    //coordinates of the cities in the city pool
-
-    new window.google.maps.Polyline({
-        path: this.state.borderLine,
-        geodesic: true,
-        strokeColor: "#FF0000",
-        strokeOpacity: 1.0,
-        strokeWeight: 2,
-        map:this.map_1
-      });
 }
     
     render(){
