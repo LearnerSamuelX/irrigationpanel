@@ -67,20 +67,20 @@ componentDidMount(){
             borderLine:res.data
         })
     })
-    // console.log(this.state.cityCoordinates)
+    console.log(this.state.cityCoordinates)
 
-    const MapCode = document.createElement('script')
-    MapCode.src =`https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GOOGLE_MAPS_API_KEY}&libraries=&v=weekly`
-    window.document.body.appendChild(MapCode)
+    // const MapCode = document.createElement('script')
+    // MapCode.src =`https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GOOGLE_MAPS_API_KEY}&libraries=&v=weekly`
+    // window.document.body.appendChild(MapCode)
     
 
-    MapCode.addEventListener('load', ()=>{
-        this.map_1 = this.initMap()
-        this.targetedCity = this.targetedCityMarker()
-        setTimeout(()=>{
-            this.predicting_region = this.cityPoolPolyLine()
-        },4000)
-    })
+    // MapCode.addEventListener('load', ()=>{
+    //     this.map_1 = this.initMap()
+    //     this.targetedCity = this.targetedCityMarker()
+    //     setTimeout(()=>{
+    //         this.predicting_region = this.cityPoolPolyLine()
+    //     },4000)
+    // })
 
 }
     

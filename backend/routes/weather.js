@@ -142,37 +142,65 @@ router.get('/radar',(req,res)=>{
     let y_point = weather_data.coord.lat
     let wind_deg = weather_data.wind.deg
 
-    let radar_range = 150  //unit in km
-    let x_d = 0
-    let y_d = 0
+    let radar_range = 150  //unit in km  25 + 25 + 50 + 50
+
+    let radar_range_list  = [25,25,25,25]
+    let city_pool_weather_condition = [ ]
+    let zone_weather_condition = []
+    let x_zone = []
+    let y_zone = []
+
+    /* Algorithm Design:
+    1. get the wind direction of the targeted city 
+
+    2. find the coordinates of the point, 25 km along the direction
+    3. create Zone I, 10 x 10
+    4. find the cities in the zone using query condition, and determine their wind directions, and get the average value
+
+    5. find the coordinates of the point, 25 km along the new direction
+    6. create Zone II, 10 x 10
+    7. find the cities in the zone using query condition, and determine the average wind direction
+
+    8. find the coordinates of the point, 25 km along the new direction
+    9. create Zone III, 10 x 10
+    10. find the cities in the zone using query condition, and determine the average wind direction
+
+    11. find the coordinates of the point, 25 km along the new direction
+    12. create Zone III, 10 x 10
+    13. find the cities in the zone using query condition, and determine the average wind direction
+    */
+
+    let x_d2 = 0
+    let y_d2 = 0
     let increment=0.00899321 //increment value of degree change for lon & lat
+
 
     let x_new = 0
     let y_new = 0 
 
-    x_d=radar_range*Math.abs(Math.sin(wind_deg*Math.PI/180))
-    y_d=radar_range*Math.abs(Math.cos(wind_deg*Math.PI/180))
+    x_d2=radar_range*Math.abs(Math.sin(wind_deg*Math.PI/180))
+    y_d2=radar_range*Math.abs(Math.cos(wind_deg*Math.PI/180))
 
     if(wind_deg>=0&&wind_deg<90){
-        x_d=radar_range*Math.abs(Math.sin(wind_deg*Math.PI/180))
-        y_d=radar_range*Math.abs(Math.cos(wind_deg*Math.PI/180))
-        x_new = x_point + x_d*increment
-        y_new = y_point + y_d*increment
+        x_d2=radar_range*Math.abs(Math.sin(wind_deg*Math.PI/180))
+        y_d2=radar_range*Math.abs(Math.cos(wind_deg*Math.PI/180))
+        x_new = x_point + x_d2*increment
+        y_new = y_point + y_d2*increment
     }else if(wind_deg>=90 && wind_deg<180){
-        x_d=radar_range*Math.abs(Math.cos((wind_deg-90)*Math.PI/180))
-        y_d=radar_range*Math.abs(Math.sin((wind_deg-90)*Math.PI/180))
-        x_new = x_point + x_d*increment
-        y_new = y_point - y_d*increment
+        x_d2=radar_range*Math.abs(Math.cos((wind_deg-90)*Math.PI/180))
+        y_d2=radar_range*Math.abs(Math.sin((wind_deg-90)*Math.PI/180))
+        x_new = x_point + x_d2*increment
+        y_new = y_point - y_d2*increment
     }else if(wind_deg>=180 && wind_deg<270){
-        x_d=radar_range*Math.abs(Math.sin((wind_deg-180)*Math.PI/180))
-        y_d=radar_range*Math.abs(Math.cos((wind_deg-180)*Math.PI/180))
-        x_new = x_point - x_d*increment
-        y_new = y_point - y_d*increment
+        x_d2=radar_range*Math.abs(Math.sin((wind_deg-180)*Math.PI/180))
+        y_d2=radar_range*Math.abs(Math.cos((wind_deg-180)*Math.PI/180))
+        x_new = x_point - x_d2*increment
+        y_new = y_point - y_d2*increment
     }else if(wind_deg>270 && wind_deg<360){
-        x_d=radar_range*Math.abs(Math.cos((wind_deg-270)*Math.PI/180))
-        y_d=radar_range*Math.abs(Math.sin((wind_deg-270)*Math.PI/180))
-        x_new = x_point - x_d*increment
-        y_new = y_point + y_d*increment
+        x_d2=radar_range*Math.abs(Math.cos((wind_deg-270)*Math.PI/180))
+        y_d2=radar_range*Math.abs(Math.sin((wind_deg-270)*Math.PI/180))
+        x_new = x_point - x_d2*increment
+        y_new = y_point + y_d2*increment
     }
 
     // coordinates of the reference point
