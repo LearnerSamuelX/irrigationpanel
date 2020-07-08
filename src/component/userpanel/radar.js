@@ -15,7 +15,10 @@ class Radar extends Component{
             cityCoordinates:[this.props.datasource.coord.lon, this.props.datasource.coord.lat],
             winddirection:this.props.datasource.wind.deg,
             cityPool:[],
-            borderLine:[]
+            borderLine:[],
+
+            //new algorithm testing states
+            zoneData:[]
         }
 }
 
