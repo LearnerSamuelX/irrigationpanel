@@ -31,7 +31,7 @@ class Analog extends Component {
                         <Dashboard nominal={this.state.humidity} range={[10,100]} unit={'%'} title={'Humidity'}/>
                     </div>
                     <div>
-                        <Dashboard nominal={this.state.windspeed*3.6} range={[0,50]} unit={'km'} title={'Windspeed'}/>
+                        <Dashboard nominal={Math.round(this.state.windspeed)*3.6} range={[0,50]} unit={'km'} title={'Windspeed'}/>
                     </div>
                 </div>
             </div>

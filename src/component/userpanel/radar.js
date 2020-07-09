@@ -95,6 +95,9 @@ componentDidMount(){
                 <p>City Coordinates:Lon: {this.state.cityCoordinates[0]}, Lat: {this.state.cityCoordinates[1]}</p>
                 <p>Wind Direction: {this.state.winddirection}˚ </p>
                 <p>Selected Cities: * Write a query, setup the range, greater or less than the chosen city's coordinates *</p>
+                <div id='predictiveZones'>
+                    <p>Zone Data: {this.state.zoneData}</p>
+                </div>
                 <div id="google-map" ref={this.googleMap} style={{ width: '500px', height: '400px' }} />
             </div>
         )

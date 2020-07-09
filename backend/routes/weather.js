@@ -144,167 +144,251 @@ router.get('/radar',(req,res)=>{
 
     let radar_range = 150  //unit in km  25 + 25 + 50 + 50
 
-    let radar_range_list  = [25,25,25,25]
-    let city_pool_weather_condition = [ ]
+    let radar_range_list  = [25]
+    let zone_range = 10
     let zone_weather_condition = []
+    let regional_weather_condition = []
     let x_zone = []
     let y_zone = []
 
+    let x_d = 0
+    let y_d = 0
+    let increment=0.00899321
+
+    let x_new_a = 0  //diagonal point, top left
+    let y_new_a = 0  
+
+    let x_new_d = 0  //diagonal point, bottom right
+    let y_new_d = 0  
     /* Algorithm Design:
-    1. get the wind direction of the targeted city 
+    -. get the wind direction of the targeted city *DONE
 
-    2. find the coordinates of the point, 25 km along the direction
-    3. create Zone I, 10 x 10
-    4. find the cities in the zone using query condition, and determine their wind directions, and get the average value
+    -. find the coordinates of the point, 25 km along the direction
+    -. create Zone I, 10 x 10
+    -. get the coordinates of diagonal points
+    -. find the cities in the zone using query condition, and determine their wind directions, and get the average value
 
-    5. find the coordinates of the point, 25 km along the new direction
-    6. create Zone II, 10 x 10
-    7. find the cities in the zone using query condition, and determine the average wind direction
+    -. find the coordinates of the point, 25 km along the new direction
+    -. create Zone II, 10 x 10
+    -. get the coordinates of diagonal points
+    -. find the cities in the zone using query condition, and determine the average wind direction
 
-    8. find the coordinates of the point, 25 km along the new direction
-    9. create Zone III, 10 x 10
-    10. find the cities in the zone using query condition, and determine the average wind direction
+    -. find the coordinates of the point, 25 km along the new direction
+    -. create Zone III, 10 x 10
+    -. get the coordinates of diagonal points
+    -. find the cities in the zone using query condition, and determine the average wind direction
 
-    11. find the coordinates of the point, 25 km along the new direction
-    12. create Zone III, 10 x 10
-    13. find the cities in the zone using query condition, and determine the average wind direction
+    -. find the coordinates of the point, 25 km along the new direction
+    -. create Zone III, 10 x 10
+    -. get the coordinates of diagonal points
+    -. find the cities in the zone using query condition, and determine the average wind direction
     */
-
-    let x_d2 = 0
-    let y_d2 = 0
-    let increment=0.00899321 //increment value of degree change for lon & lat
-
-
-    let x_new = 0
-    let y_new = 0 
-
-    x_d2=radar_range*Math.abs(Math.sin(wind_deg*Math.PI/180))
-    y_d2=radar_range*Math.abs(Math.cos(wind_deg*Math.PI/180))
-
-    if(wind_deg>=0&&wind_deg<90){
-        x_d2=radar_range*Math.abs(Math.sin(wind_deg*Math.PI/180))
-        y_d2=radar_range*Math.abs(Math.cos(wind_deg*Math.PI/180))
-        x_new = x_point + x_d2*increment
-        y_new = y_point + y_d2*increment
-    }else if(wind_deg>=90 && wind_deg<180){
-        x_d2=radar_range*Math.abs(Math.cos((wind_deg-90)*Math.PI/180))
-        y_d2=radar_range*Math.abs(Math.sin((wind_deg-90)*Math.PI/180))
-        x_new = x_point + x_d2*increment
-        y_new = y_point - y_d2*increment
-    }else if(wind_deg>=180 && wind_deg<270){
-        x_d2=radar_range*Math.abs(Math.sin((wind_deg-180)*Math.PI/180))
-        y_d2=radar_range*Math.abs(Math.cos((wind_deg-180)*Math.PI/180))
-        x_new = x_point - x_d2*increment
-        y_new = y_point - y_d2*increment
-    }else if(wind_deg>270 && wind_deg<360){
-        x_d2=radar_range*Math.abs(Math.cos((wind_deg-270)*Math.PI/180))
-        y_d2=radar_range*Math.abs(Math.sin((wind_deg-270)*Math.PI/180))
-        x_new = x_point - x_d2*increment
-        y_new = y_point + y_d2*increment
-    }
-
-    // coordinates of the reference point
-    // console.log(x_new)
-    // console.log(y_new)
-
-    let half_width = 20
-
-    x_1 = x_new - half_width*increment
-    y_1 = y_new + half_width*increment
-        
-    x_2 = x_new + half_width*increment
-    y_2 = y_new + half_width*increment
-
-    x_3 = x_new + half_width*increment
-    y_3 = y_new - half_width*increment
-
-    x_4 = x_new - half_width*increment
-    y_4 = y_new - half_width*increment
-
-    let x_m = x_new
-    let y_m = y_new - half_width*increment
-
-    fs.readFile('../public/weatherdata/citylist.json',(err,data)=>{
-        if(err){
-            console.log(err)
+    for (let i=0;i<radar_range_list.length;i++){
+        let range = radar_range_list[i]
+        if(wind_deg>=0&&wind_deg<90){
+            x_d=range*Math.abs(Math.sin(wind_deg*Math.PI/180))
+            y_d=range*Math.abs(Math.cos(wind_deg*Math.PI/180))
+            x_new = x_point + x_d*increment
+            y_new = y_point + y_d*increment
+        }else if(wind_deg>=90&&wind_deg<180){
+            x_d=range*Math.abs(Math.cos((wind_deg-90)*Math.PI/180))
+            y_d=range*Math.abs(Math.sin((wind_deg-90)*Math.PI/180))
+            x_new = x_point + x_d*increment
+            y_new = y_point + y_d*increment
+        }else if(wind_deg>=180&&wind_deg<270){
+            x_d=range*Math.abs(Math.sin((wind_deg-180)*Math.PI/180))
+            y_d=range*Math.abs(Math.cos((wind_deg-180)*Math.PI/180))
+            x_new = x_point - x_d*increment
+            y_new = y_point - y_d*increment
         }else{
-                city_pool = (JSON.parse(data)).filter(i=>
-                i.coord.lon>=x_1&&i.coord.lat<=y_1&&i.coord.lon<=x_3&&i.coord.lat>=y_3
-            )
-            // console.log(city_pool)
+            x_d=range*Math.abs(Math.cos((wind_deg-270)*Math.PI/180))
+            y_d=range*Math.abs(Math.sin((wind_deg-270)*Math.PI/180))
+            x_new = x_point - x_d*increment
+            y_new = y_point + y_d*increment
         }
-    })
 
-    weather_pool = [ ]
-    city_weather_pool = [ ]
-    setTimeout(()=>{
-        city_pool.forEach(async(j)=>{
-            let cityname = j.name
-            let countryname = j.country
-            let api_key='2357e9d6edbc1dca9778ffaae19a1bf0'
-            let raw = await fetch(`http://api.openweathermap.org/data/2.5/weather?q=${cityname},${countryname}&appid=${api_key}`)
-            let data = await raw.json()
-            weather_pool.push(data)
-        })
-    },1000) //testing
+        x_point = x_new
+        y_point = y_new
 
-    setTimeout(()=>{
-        weather_pool.forEach(async (n)=>{
-            let reference_point = await RadarCity({
-                name:n.name,
-                'location':{
-                    'type':'Point',
-                    'coordinates': [n.coord.lon,n.coord.lat]
-                },
-                weather:n.weather[0].main
-            }).save()
-            city_weather_pool.push(reference_point)
-        })
-    },2500)
+        x_new_a = x_new - zone_range*increment
+        y_new_a = y_new + zone_range*increment
 
-    let rain_counter = 0
-    setTimeout(()=>{
-        //implement probablity calculation here
-        weather_pool.forEach((k)=>{
-            if(k.weather.main==='Rain'){
-                rain_counter = rain_counter + 1
+        x_new_d = x_new + zone_range*increment
+        y_new_d = y_new - zone_range*increment
+        //x_new and y_new determined
+        
+        console.log(x_new_a,y_new_a)
+        console.log(x_new_d,y_new_d)
+
+        let city_pool= []
+        fs.readFile('../public/weatherdata/citylist.json',(err,data)=>{
+            if(err){
+                console.log(err)
+            }
+            else{
+                city_pool = (JSON.parse(data)).filter(
+                    i=>i.coord.lon>=x_new_a&&i.coord.lat<=y_new_a&&i.coord.lon<=x_new_d&&i.coord.lat>=y_new_d
+                )
             }
         })
-        console.log('Rain Probability is: '+ rain_counter/weather_pool.length)
-        console.log(city_pool)
-        res.json(city_weather_pool)
-    },4000)
+        //it will take some time going through this massive geolocation file
+
+        setTimeout(()=>{
+            city_pool.map(async(i)=>{
+                let cityname = i.name
+                let countryname = i.country
+                let api_key='2357e9d6edbc1dca9778ffaae19a1bf0'
+                let raw = await fetch(`http://api.openweathermap.org/data/2.5/weather?q=${cityname},${countryname}&appid=${api_key}`)
+                let data = await raw.json()
+                zone_weather_condition.push(data)
+            })
+        },2500)
+        
+        setTimeout(()=>{
+            console.log(zone_weather_condition)
+            regional_weather_condition.push(zone_weather_condition)
+            console.log(regional_weather_condition)
+            //determine the avaerage value of wind direction
+        },3500)
+    }
+    res.json('Testing')
 })
+//     let x_d2 = 0
+//     let y_d2 = 0
+//     let increment=0.00899321 //increment value of degree change for lon & lat
 
 
-router.get('/radar_2',(req,res)=>{
-    setTimeout(()=>{
-        let polyLineCoordinates = [
-            {
-                lat:y_1,
-                lng:x_1
-            },
+//     let x_new = 0
+//     let y_new = 0 
+
+//     x_d2=radar_range*Math.abs(Math.sin(wind_deg*Math.PI/180))
+//     y_d2=radar_range*Math.abs(Math.cos(wind_deg*Math.PI/180))
+
+//     if(wind_deg>=0&&wind_deg<90){
+//         x_d2=radar_range*Math.abs(Math.sin(wind_deg*Math.PI/180))
+//         y_d2=radar_range*Math.abs(Math.cos(wind_deg*Math.PI/180))
+//         x_new = x_point + x_d2*increment
+//         y_new = y_point + y_d2*increment
+//     }else if(wind_deg>=90 && wind_deg<180){
+//         x_d2=radar_range*Math.abs(Math.cos((wind_deg-90)*Math.PI/180))
+//         y_d2=radar_range*Math.abs(Math.sin((wind_deg-90)*Math.PI/180))
+//         x_new = x_point + x_d2*increment
+//         y_new = y_point - y_d2*increment
+//     }else if(wind_deg>=180 && wind_deg<270){
+//         x_d2=radar_range*Math.abs(Math.sin((wind_deg-180)*Math.PI/180))
+//         y_d2=radar_range*Math.abs(Math.cos((wind_deg-180)*Math.PI/180))
+//         x_new = x_point - x_d2*increment
+//         y_new = y_point - y_d2*increment
+//     }else if(wind_deg>270 && wind_deg<360){
+        // x_d2=radar_range*Math.abs(Math.cos((wind_deg-270)*Math.PI/180))
+        // y_d2=radar_range*Math.abs(Math.sin((wind_deg-270)*Math.PI/180))
+        // x_new = x_point - x_d2*increment
+        // y_new = y_point + y_d2*increment
+//     }
+
+//     // coordinates of the reference point
+//     // console.log(x_new)
+//     // console.log(y_new)
+
+//     let half_width = 20
+
+//     x_1 = x_new - half_width*increment
+//     y_1 = y_new + half_width*increment
+        
+//     x_2 = x_new + half_width*increment
+//     y_2 = y_new + half_width*increment
+
+//     x_3 = x_new + half_width*increment
+//     y_3 = y_new - half_width*increment
+
+//     x_4 = x_new - half_width*increment
+//     y_4 = y_new - half_width*increment
+
+//     let x_m = x_new
+//     let y_m = y_new - half_width*increment
+
+//     fs.readFile('../public/weatherdata/citylist.json',(err,data)=>{
+//         if(err){
+//             console.log(err)
+//         }else{
+//                 city_pool = (JSON.parse(data)).filter(i=>
+//                 i.coord.lon>=x_1&&i.coord.lat<=y_1&&i.coord.lon<=x_3&&i.coord.lat>=y_3
+//             )
+//             // console.log(city_pool)
+//         }
+//     })
+
+//     weather_pool = [ ]
+//     city_weather_pool = [ ]
+//     setTimeout(()=>{
+//         city_pool.forEach(async(j)=>{
+//             let cityname = j.name
+//             let countryname = j.country
+//             let api_key='2357e9d6edbc1dca9778ffaae19a1bf0'
+//             let raw = await fetch(`http://api.openweathermap.org/data/2.5/weather?q=${cityname},${countryname}&appid=${api_key}`)
+//             let data = await raw.json()
+//             weather_pool.push(data)
+//         })
+//     },1000) //testing
+
+//     setTimeout(()=>{
+//         weather_pool.forEach(async (n)=>{
+//             let reference_point = await RadarCity({
+//                 name:n.name,
+//                 'location':{
+//                     'type':'Point',
+//                     'coordinates': [n.coord.lon,n.coord.lat]
+//                 },
+//                 weather:n.weather[0].main
+//             }).save()
+//             city_weather_pool.push(reference_point)
+//         })
+//     },2500)
+
+//     let rain_counter = 0
+//     setTimeout(()=>{
+//         //implement probablity calculation here
+//         weather_pool.forEach((k)=>{
+//             if(k.weather.main==='Rain'){
+//                 rain_counter = rain_counter + 1
+//             }
+//         })
+//         console.log('Rain Probability is: '+ rain_counter/weather_pool.length)
+//         console.log(city_pool)
+//         res.json(city_weather_pool)
+//     },4000)
+// })
+
+
+// router.get('/radar_2',(req,res)=>{
+//     setTimeout(()=>{
+//         let polyLineCoordinates = [
+//             {
+//                 lat:y_1,
+//                 lng:x_1
+//             },
             
-            {
-                lat:y_2,
-                lng:x_2
-            },
-            {
-                lat:y_3,
-                lng:x_3
-            },
-            {
-                lat:y_4,
-                lng:x_4
-            },
-            {
-                lat:y_1,
-                lng:x_1
-            }
-        ]
-        res.json(polyLineCoordinates)
-    },3000)
-})
+//             {
+//                 lat:y_2,
+//                 lng:x_2
+//             },
+//             {
+//                 lat:y_3,
+//                 lng:x_3
+//             },
+//             {
+//                 lat:y_4,
+//                 lng:x_4
+//             },
+//             {
+//                 lat:y_1,
+//                 lng:x_1
+//             }
+//         ]
+//         res.json(polyLineCoordinates)
+//     },3000)
+// })
+
 
 //just for testing purposes
 router.get('/testing',async (req,res)=>{
