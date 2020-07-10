@@ -127,15 +127,6 @@ let city_pool = []
 let weather_pool = []
 let city_weather_pool  = []
 
-let x_1 = 0
-let x_2 = 0
-let x_3 = 0 
-let x_4 = 0
-let y_1 = 0
-let y_2 = 0
-let y_3 = 0 
-let y_4 = 0
-
 router.get('/radar',(req,res)=>{
 
     let x_point = weather_data.coord.lon
@@ -194,7 +185,7 @@ router.get('/radar',(req,res)=>{
             x_d=range*Math.abs(Math.cos((wind_deg-90)*Math.PI/180))
             y_d=range*Math.abs(Math.sin((wind_deg-90)*Math.PI/180))
             x_new = x_point + x_d*increment
-            y_new = y_point + y_d*increment
+            y_new = y_point - y_d*increment
         }else if(wind_deg>=180&&wind_deg<270){
             x_d=range*Math.abs(Math.sin((wind_deg-180)*Math.PI/180))
             y_d=range*Math.abs(Math.cos((wind_deg-180)*Math.PI/180))
@@ -217,10 +208,14 @@ router.get('/radar',(req,res)=>{
         y_new_d = y_new - zone_range*increment
         //x_new and y_new determined
         
-        console.log(x_new_a,y_new_a)
-        console.log(x_new_d,y_new_d)
+        // console.log(wind_deg)
+        // console.log(x_new,y_new)
+        // console.log(x_new_a,y_new_a)
+        // console.log(x_new_d,y_new_d)
 
-        let city_pool= []
+        city_pool= []
+        zone_weather_condition = []
+
         fs.readFile('../public/weatherdata/citylist.json',(err,data)=>{
             if(err){
                 console.log(err)
@@ -232,26 +227,53 @@ router.get('/radar',(req,res)=>{
             }
         })
         //it will take some time going through this massive geolocation file
-
         setTimeout(()=>{
-            city_pool.map(async(i)=>{
-                let cityname = i.name
-                let countryname = i.country
-                let api_key='2357e9d6edbc1dca9778ffaae19a1bf0'
-                let raw = await fetch(`http://api.openweathermap.org/data/2.5/weather?q=${cityname},${countryname}&appid=${api_key}`)
-                let data = await raw.json()
-                zone_weather_condition.push(data)
-            })
+            // console.log(city_pool)
+            if(city_pool.length===0){
+                console.log('Reached water with unknown marine data.')
+                return
+            }else{
+                city_pool.map(async(i)=>{
+                    let cityname = i.name
+                    let countryname = i.country
+                    let api_key='2357e9d6edbc1dca9778ffaae19a1bf0'
+                    let raw = await fetch(`http://api.openweathermap.org/data/2.5/weather?q=${cityname},${countryname}&appid=${api_key}`)
+                    let data = await raw.json()
+                    zone_weather_condition.push(data)
+                })
+                
+                setTimeout(()=>{
+                    //determine the avaerage value of wind direction
+                    console.log(zone_weather_condition)  //the weather condition of cities in the 1st square
+                    let wind_direction = []
+                    zone_weather_condition.map((j)=>{
+                        wind_direction.push(j.wind.deg)
+                    })
+                    wind_direction.sort((a, b)=>{
+                        return b-a
+                    })
+                    console.log('Wind Direction: '+ wind_direction)
+                    let new_angle = 0
+                    for (let k=0;k<wind_direction.length;k++){
+                        let cursor = wind_direction[k]
+                        let ref = 0
+                        let ruler = wind_direction.filter(i=>i===cursor)
+                        // console.log(ruler)
+                        if(ruler.length>ref){
+                            ref = ruler.length
+                            new_angle = wind_direction[k]
+                        }
+                        // console.log(new_angle)
+                        wind_deg = new_angle
+                    }
+                    console.log('New wind direction is:'+ wind_deg)
+                    regional_weather_condition.push(zone_weather_condition)
+                    // console.log(regional_weather_condition)
+                },2500)
+            }
         },2500)
-        
-        setTimeout(()=>{
-            console.log(zone_weather_condition)
-            regional_weather_condition.push(zone_weather_condition)
-            console.log(regional_weather_condition)
-            //determine the avaerage value of wind direction
-        },3500)
     }
-    res.json('Testing')
+    res.json(regional_weather_condition)
 })
 //     let x_d2 = 0
 //     let y_d2 = 0
