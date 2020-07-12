@@ -205,7 +205,7 @@ router.get('/radar',(req,res)=>{
             y_new_b = y_new + zone_range*increment
 
             x_new_c = x_new - zone_range*increment
-            y_new_c = y_new + zone_range*increment
+            y_new_c = y_new - zone_range*increment
 
             x_new_d = x_new + zone_range*increment
             y_new_d = y_new - zone_range*increment
@@ -218,14 +218,15 @@ router.get('/radar',(req,res)=>{
                 
                 {
                     lat:y_new_b,
-                    lng:x_new_b                },
-                {
-                    lat:y_new_c,
-                    lng:x_new_c
+                    lng:x_new_b   
                 },
                 {
                     lat:y_new_d,
                     lng:x_new_d,
+                },
+                {
+                    lat:y_new_c,
+                    lng:x_new_c
                 },
                 {
                     lat:y_new_a,
@@ -308,7 +309,7 @@ router.get('/radar',(req,res)=>{
         console.log('Terminated at: ' + x_point +' '+ y_point)
         // console.log(regional_weather_condition)
         console.log(zone_collection)
-        res.json(regional_weather_condition)
+        res.json(regional_weather_condition) //render weather data of the cities in the predicative zone to Front End
     },4300*radar_range_list.length)
 })
 
