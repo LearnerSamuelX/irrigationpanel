@@ -110,8 +110,6 @@ router.get('/loggedin/citySearch',(req,res)=>{
                     }else{
                         let cityname_url=status_check.cityName
                         let country_url=status_check.countryCode
-                        // let api_key='2357e9d6edbc1dca9778ffaae19a1bf0'
-                        let state_url=""
                         let raw = await fetch(`http://api.openweathermap.org/data/2.5/weather?q=${cityname_url},${country_url}&appid=${process.env.API_KEY}`)
                         weather_data = await raw.json();
                         res.json(weather_data)
@@ -130,8 +128,8 @@ router.get('/radar',(req,res)=>{
 
     let radar_range = 150  //unit in km  25 + 25 + 50 + 50
 
-    let radar_range_list  = [25,50,50,50]
-    let zone_range = 15
+    let radar_range_list  = [50,50,50,50]
+    let zone_range = 12.5
     let zone_weather_condition = []
     let regional_weather_condition = []
 
@@ -169,13 +167,13 @@ router.get('/radar',(req,res)=>{
     -. find the cities in the zone using query condition, and determine the average wind direction
     */
     let city_pool = []
-    let counter = 0
+    let zone_collection = []
 
     for (let m=0;m<radar_range_list.length;m++){
         
         let index = m
         setTimeout(()=>{
-            console.log(index+' Central point coordinates as inputs: '+' '+ x_point +' '+ y_point)
+            console.log('Centre point coordinates for inputs: '+' '+ x_point +' '+ y_point + '. Round:'+m)
             let range = radar_range_list[index]
             if(wind_deg>=0&&wind_deg<90){
                 x_d=range*Math.abs(Math.sin(wind_deg*Math.PI/180))
@@ -202,13 +200,42 @@ router.get('/radar',(req,res)=>{
             x_new_a = x_new - zone_range*increment
             y_new_a = y_new + zone_range*increment
 
+            x_new_b = x_new + zone_range*increment
+            y_new_b = y_new + zone_range*increment
+
+            x_new_c = x_new - zone_range*increment
+            y_new_c = y_new + zone_range*increment
+
             x_new_d = x_new + zone_range*increment
             y_new_d = y_new - zone_range*increment
-            
-            console.log('Wind Direction '+wind_deg + ' '+m+' try')
+
+            let polyLineCoordinates = [
+                {
+                    lat:y_new_a,
+                    lng:x_new_a
+                },
+                
+                {
+                    lat:y_new_b,
+                    lng:x_new_b                },
+                {
+                    lat:y_new_c,
+                    lng:x_new_c
+                },
+                {
+                    lat:y_new_d,
+                    lng:x_new_d,
+                },
+                {
+                    lat:y_new_a,
+                    lng:x_new_a
+                }
+            ]
+            zone_collection.push(polyLineCoordinates)
+
+            console.log('Wind Direction '+wind_deg + '. '+' Round:'+m)
             console.log(x_new_a,y_new_a)
             console.log(x_new_d,y_new_d)
-        
 
             zone_weather_condition = []
             fs.readFile('../public/weatherdata/citylist.json',(err,data)=>{
@@ -219,9 +246,10 @@ router.get('/radar',(req,res)=>{
                     city_pool = (JSON.parse(data)).filter(
                         i=>i.coord.lon>=x_new_a&&i.coord.lat<=y_new_a&&i.coord.lon<=x_new_d&&i.coord.lat>=y_new_d
                     )
+                    console.log(city_pool)
                 }
             })
-        },5000*m)
+        },4000*m)
 
         //it will take some time going through this massive geolocation file
         setTimeout(()=>{
@@ -238,12 +266,11 @@ router.get('/radar',(req,res)=>{
                     zone_weather_condition.push(data)
                 })
             }
-        },2500*(m+1))
+        },3000*(m+1))
 
         setTimeout(()=>{
             //determine the avaerage value of wind direction
             // console.log(zone_weather_condition)  //the weather condition of cities in the 1st square
-            console.log(city_pool)
             let wind_direction = []
             zone_weather_condition.map((j)=>{
                 wind_direction.push(j.wind.deg)
@@ -251,65 +278,42 @@ router.get('/radar',(req,res)=>{
             wind_direction.sort((a, b)=>{
                 return b-a
             })
+            //sorted in descending order
             console.log('List of Wind Direction: '+ wind_direction)
             let new_angle = 0
             for (let k=0;k<wind_direction.length;k++){
                 let cursor = wind_direction[k]
-                let ref = 0
+                let ref = 1
                 let ruler = wind_direction.filter(i=>i===cursor)
                 // console.log(ruler)
-                if(ruler.length>ref){
+                if(ruler.length>=ref){
                     ref = ruler.length
                     new_angle = wind_direction[k]
                 }
                 // console.log(new_angle)
-                wind_deg = new_angle
             }
+            wind_deg = new_angle
             // console.log('New wind direction is:'+ wind_deg)
             regional_weather_condition.push(zone_weather_condition)
             x_point = x_new
             y_point = y_new
             console.log(m+' Updated to point ' + x_point +', '+ y_point) 
-        },2000*(m+1))
+            console.log('------|------|------|------|------|------') 
+        },3200*(m+1))
             
     }
 
     setTimeout(()=>{
         console.log('Terminated at: ' + x_point +' '+ y_point)
-        console.log(city_pool)
         // console.log(regional_weather_condition)
+        console.log(zone_collection)
         res.json(regional_weather_condition)
-    },5100*radar_range_list.length)
+    },4300*radar_range_list.length)
 })
 
-// router.get('/radar_2',(req,res)=>{
-//     setTimeout(()=>{
-//         let polyLineCoordinates = [
-//             {
-//                 lat:y_1,
-//                 lng:x_1
-//             },
-            
-//             {
-//                 lat:y_2,
-//                 lng:x_2
-//             },
-//             {
-//                 lat:y_3,
-//                 lng:x_3
-//             },
-//             {
-//                 lat:y_4,
-//                 lng:x_4
-//             },
-//             {
-//                 lat:y_1,
-//                 lng:x_1
-//             }
-//         ]
-//         res.json(polyLineCoordinates)
-//     },3000)
-// })
+router.get('/radar_2',(req,res)=>{
+    res.json('On hold')
+})
 
 
 //just for testing purposes
