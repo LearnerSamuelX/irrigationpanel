@@ -169,7 +169,7 @@ router.get('/radar',(req,res)=>{
     -. find the cities in the zone using query condition, and determine the average wind direction
     */
     let city_pool = []
-
+    let new_angle = 0
     for (let m=0;m<radar_range_list.length;m++){
         
         let index = m
@@ -282,7 +282,7 @@ router.get('/radar',(req,res)=>{
             })
             //sorted in descending order
             console.log('List of Wind Direction: '+ wind_direction)
-            let new_angle = 0
+            
             for (let k=0;k<wind_direction.length;k++){
                 let cursor = wind_direction[k]
                 let ref = 1

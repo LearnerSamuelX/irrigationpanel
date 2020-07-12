@@ -1,5 +1,6 @@
 import React, { Component,createRef} from 'react';
 import axios from 'axios';
+import '../../stylessheet/radar.css'
 
 require('dotenv').config();
 
@@ -24,7 +25,7 @@ class Radar extends Component{
 
 initMap(){
     return new window.google.maps.Map(this.googleMap.current,{
-        zoom: 7.5,
+        zoom: 8,
         center:{ lat: this.state.cityCoordinate[1], lng:this.state.cityCoordinate[0] }, //reposition the centre
       disableDefaultUI: true,
     })
@@ -47,11 +48,12 @@ cityPoolPolyLine(){
     console.log(this.state.borderLine)   //coordinates for creating border line
     console.log(citypool_coordinates)    //coordinates of the cities in the city pool
 
+    let color_pool = ["#2AA181","#3FF0D0","#B6C724"]
     for (let i=0;i<this.state.borderLine.length;i++){
         new window.google.maps.Polyline({
             path: this.state.borderLine[i],
             geodesic: true,
-            strokeColor: "#2AA181",
+            strokeColor: color_pool[i],
             strokeOpacity: 1.0,
             strokeWeight: 2,
             map:this.map_1
@@ -67,7 +69,7 @@ componentDidMount(){
         })
     })
 
-    for(let j=1;j<4;j++){
+    for(let j=1;j<6;j++){
         setTimeout(()=>{
             axios.get('http://localhost:5000/weather/radar_2').then((res)=>{
                 this.setState({
@@ -88,7 +90,7 @@ componentDidMount(){
     MapCode.addEventListener('load', ()=>{
         this.map_1 = this.initMap()
         this.targetedCity = this.targetedCityMarker()
-        for (let k=1;k<4;k++){
+        for (let k=1;k<6;k++){
             setTimeout(()=>{
                 this.predicting_region = this.cityPoolPolyLine()
             },2500*k)
@@ -101,14 +103,12 @@ componentDidMount(){
         return(
             <div className='radar-page'>
                 <h1>Weather Radar</h1>
-                <p>City Name: {this.state.cityname}</p>
                 <p>City Coordinates:Lon: {this.state.cityCoordinate[0]}, Lat: {this.state.cityCoordinate[1]}</p>
                 <p>Wind Direction: {this.state.winddirection}˚ </p>
-                <p>Selected Cities: * Write a query, setup the range, greater or less than the chosen city's coordinates *</p>
                 <div id='predictiveZones'>
                     <p>Zone Data: {this.state.zoneData}</p>
                 </div>
-                <div id="google-map" ref={this.googleMap} style={{ width: '500px', height: '400px' }} />
+                <div id="google-map" ref={this.googleMap} style={{ width: '800px', height: '600px' }} />
             </div>
         )
     }
