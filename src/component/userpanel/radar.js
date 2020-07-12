@@ -65,12 +65,16 @@ componentDidMount(){
         })
     })
 
-    axios.get('http://localhost:5000/weather/radar_2').then((res)=>{
-        this.setState({
-            borderLine:res.data
+    setTimeout(()=>{
+        axios.get('http://localhost:5000/weather/radar_2').then((res)=>{
+            this.setState({
+                borderLine:res.data
+            })
+
+        console.log(this.state.cityCoordinates)
+        console.log(this.state.borderLine)
         })
-    })
-    console.log(this.state.cityCoordinates)
+    },13000)
 
     // const MapCode = document.createElement('script')
     // MapCode.src =`https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GOOGLE_MAPS_API_KEY}&libraries=&v=weekly`
@@ -82,7 +86,7 @@ componentDidMount(){
     //     this.targetedCity = this.targetedCityMarker()
     //     setTimeout(()=>{
     //         this.predicting_region = this.cityPoolPolyLine()
-    //     },4000)
+    //     },17000)
     // })
 
 }

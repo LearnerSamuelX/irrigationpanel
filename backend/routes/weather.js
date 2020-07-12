@@ -120,15 +120,17 @@ router.get('/loggedin/citySearch',(req,res)=>{
     },250)
 })
 
-router.get('/radar',(req,res)=>{
 
+let zone_collection = []
+router.get('/radar',(req,res)=>{
+    zone_collection = []
     let x_point = weather_data.coord.lon
     let y_point = weather_data.coord.lat
     let wind_deg = weather_data.wind.deg
 
     let radar_range = 150  //unit in km  25 + 25 + 50 + 50
 
-    let radar_range_list  = [50,50,50,50]
+    let radar_range_list  = [50,50,50]
     let zone_range = 12.5
     let zone_weather_condition = []
     let regional_weather_condition = []
@@ -167,7 +169,6 @@ router.get('/radar',(req,res)=>{
     -. find the cities in the zone using query condition, and determine the average wind direction
     */
     let city_pool = []
-    let zone_collection = []
 
     for (let m=0;m<radar_range_list.length;m++){
         
@@ -312,7 +313,7 @@ router.get('/radar',(req,res)=>{
 })
 
 router.get('/radar_2',(req,res)=>{
-    res.json('On hold')
+    res.json(zone_collection)
 })
 
 
