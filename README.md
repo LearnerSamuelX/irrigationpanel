@@ -6,7 +6,7 @@ In the summer, for those who do gardening works, occasionally they can be misled
 
 <img src=ReadMe.gif height=600px>
 <br>
-Predicative zone formation timeline is shown in the gif image above. 
+Predicative zone formation timeline is shown in the ```gif``` image above. 
 
 The geolocation of each zone is calculated based on the **average wind direction** and the **central coordinate** of the last zone (city origin). (City ->Zone 1-> Zone 2 -> Zone 3)
 
