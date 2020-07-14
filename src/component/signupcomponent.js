@@ -66,14 +66,18 @@ class Signupcomponent extends Component{
     
     render(){
         return(
-            <div>
-                <form id='login-container'>
-                    <label>Username:</label>
-                    <input type='text'value={this.state.username} onChange={this.onChangeUsername}></input>
-                    <label>Password:</label>
-                    <input type='password'value={this.state.password} onChange={this.onChangePassword}></input>
-                    <label>Confirm Password:</label>
-                    <input type='password'value={this.state.password_2} onChange={this.onChangePassword_2}></input>
+            <div id='login-container'>
+                <form id='form-container'>
+                    <div id='username'>
+                        <label>Username:</label>
+                        <input type='text'value={this.state.username} onChange={this.onChangeUsername}></input>
+                    </div>
+                    <div id='password'>
+                        <label>Password:</label>
+                        <input id='input-1'type='password'value={this.state.password} onChange={this.onChangePassword}></input>
+                        <label>Confirm Password:</label>
+                        <input type='password'value={this.state.password_2} onChange={this.onChangePassword_2}></input>
+                    </div>
                     <button onClick={this.onSubmit}>Sign Up</button>
                 </form>
             </div>

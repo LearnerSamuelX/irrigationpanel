@@ -2,7 +2,7 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose');
 const cors = require('cors')
-const path = require('path')
+const path = require('path') //this line is for deployement 
 
 const weatherRoute = require('./routes/weather.js')
 

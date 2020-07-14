@@ -1,0 +1,53 @@
+#login-container{
+    border:rgb(248, 248, 125) 2.5px solid;
+    border-radius: 15px;
+    background-color:rgb(248, 248, 125);
+    width:25rem;
+    margin-left:auto;
+    margin-right:auto;
+    margin-top:5%;
+}
+
+#form-container {
+    display:flex;
+    flex-direction: column;
+}
+
+#username {
+    display: flex;
+    flex-direction: column;
+    width:12.5rem;
+    margin-left:auto;
+    margin-right:auto;
+    margin-top:1rem;
+}
+
+#password {
+    display: flex;
+    flex-direction: column;
+    width:12.5rem;
+    margin-left:auto;
+    margin-right:auto;
+    margin-top:1rem;
+}
+
+#form-container button{
+    width:7.5rem;
+    height:2.5rem;
+    margin:1.25rem auto 1.25rem auto;
+    font-size: 15px;
+    font-weight: bold;
+    border:grey 2px solid;
+    border-radius: 5px;    
+}
+
+#form-container button:hover{
+    border:rgb(253, 253, 253) 2px solid;
+    background-color: rgb(66, 66, 66);
+    color: rgb(224, 224, 224);
+    cursor:pointer;
+}
+
+#input-1{
+    margin-bottom: 1.25rem;
+}

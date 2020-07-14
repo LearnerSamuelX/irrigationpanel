@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import '../stylessheet/citysearch.css'
 
 class CitySearch extends Component{
     constructor(props){
@@ -56,7 +57,6 @@ class CitySearch extends Component{
             country:this.state.country
         }
 
-        
         axios.post('http://localhost:5000/weather/loggedin/citySearch',searchCity)
         // .then((res)=>{
         //     console.log(res.data)
@@ -82,14 +82,18 @@ class CitySearch extends Component{
             )
         }else{
             return(
-                <div>
+                <div id='greeting'>
                     <h1>Hello,  {this.state.username}!</h1>
                     
-                    <form>
+                    <form id='city-search-container'>
+                        <div id='city-search'>
                         <p>Enter your city: </p>    
                         <input type='text'value={this.state.cityName}onChange={this.onChangeCityName}></input>
+                        </div>
+                        <div id='country-search'>
                         <p>Enter your Country: </p>    
                         <input type='text'value={this.state.country}onChange={this.onChangeCountry}></input>
+                        </div>
                         <button onClick={this.citySearch}>Search</button>
                     </form>
                     

@@ -1,0 +1,50 @@
+#homepage-container {
+    margin-top:5%;
+}
+
+#homepage-container h1{
+    border:greenyellow 2px solid;
+    border-radius:10px;
+    background-color: greenyellow;
+    width:20rem;
+    margin-left:auto;
+    margin-right:auto;
+    padding:1.25rem;
+    margin-top:1rem;
+    text-align: center;
+}
+
+#homepage-button-containter {
+
+    border:rgb(98, 164, 240) 2.5px solid;
+    border-radius:15px;
+    background:rgb(98, 164, 240);
+    display:flex;
+    flex-direction:row;
+    width:20rem;
+    margin-top:2rem;
+    margin-left:auto;
+    margin-right:auto;
+    padding-top:2rem;
+    padding-bottom:2rem;
+    padding-left:1.25rem;
+    padding-right:1.25rem;
+}
+
+#homepage-button-containter button{
+    width:5rem;
+    height:2.5rem;
+    margin-left:2.5rem;
+    margin-right:2.5rem;
+    border:grey 2px solid;
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: 15px;
+}
+
+#homepage-button-containter button:hover{
+    border:rgb(253, 253, 253) 2px solid;
+    background-color: rgb(66, 66, 66);
+    color: rgb(224, 224, 224);
+    cursor:pointer;
+}

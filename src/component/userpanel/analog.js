@@ -22,7 +22,7 @@ class Analog extends Component {
     render(){
         return(
             <div className='analog-page'>
-                <h1 className='page-title'>Analog Weather Dashboard</h1>
+                <h2 className='page-title'>Analog Weather Dashboard</h2>
                 <div className='dashboard-collection'>
                     <div>
                         <Dashboard nominal={this.state.temperature} range={[10,40]} unit={'˚C'} title={'Temperature'}/>

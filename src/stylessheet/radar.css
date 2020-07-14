@@ -1,8 +1,12 @@
 .radar-page{
     text-align: center;
+    border:red 2.5px solid;
+    width:50rem;
+    margin-left: auto;
+    margin-right:auto;
 }
 
 #google-map{
-    margin-left: auto;
+    margin-left:auto;
     margin-right:auto;
 }

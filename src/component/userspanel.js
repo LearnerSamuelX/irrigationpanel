@@ -48,7 +48,7 @@ class UsersPanel extends Component{
             return(
                 <div id='container'>
                     <div className='location'>
-                        <h3>Location: {this.state.weatherdata.name},{this.state.weatherdata.sys.country}</h3>
+                        <h2>Location: {this.state.weatherdata.name},{this.state.weatherdata.sys.country}</h2>
                     </div>
                     <BrowserRouter>
                         <Switch>
