@@ -1,6 +1,6 @@
 {
-  "short_name": "Irrigation Panel",
-  "name": "Create React App Sample",
+  "short_name": "ipanel",
+  "name": "Irrigation Panel",
   "icons": [
     {
       "src": "favicon.ico",

@@ -13,18 +13,23 @@ const port = process.env.PORT || 5000
 
 app.use(cors())
 app.use(bodyParser.json())
+app.use(express.static(path.join(__dirname,'/build')))
 
 app.use('/weather',weatherRoute)
 
 const atlas_uri = process.env.ATLAS_URI  //use local library for now
 const local_uri = process.env.LOCAL_URI
 
-mongoose.connect(local_uri,{useNewUrlParser:true,useCreateIndex:true})
+mongoose.connect(atlas_uri,{useNewUrlParser:true,useCreateIndex:true})
 mongoose.set('useFindAndModify', false);
 
 const db = mongoose.connection
 db.once('open',()=>{
-    console.log('Mongoose database connected') //
+    console.log('Mongoose database connected') 
+})
+
+app.get('*',(req,res)=>{
+    res.sendFile(path.join(__dirname+'/build/index.html'))
 })
 
 app.listen(port,()=>{

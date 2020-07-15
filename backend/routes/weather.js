@@ -169,7 +169,6 @@ router.get('/radar',(req,res)=>{
     -. find the cities in the zone using query condition, and determine the average wind direction
     */
     let city_pool = []
-    let new_angle = 0
     for (let m=0;m<radar_range_list.length;m++){
         
         let index = m
@@ -251,7 +250,7 @@ router.get('/radar',(req,res)=>{
                     console.log(city_pool)
                 }
             })
-        },4000*m)
+        },4300*m)
 
         //it will take some time going through this massive geolocation file
         setTimeout(()=>{
@@ -274,6 +273,7 @@ router.get('/radar',(req,res)=>{
             //determine the avaerage value of wind direction
             // console.log(zone_weather_condition)  //the weather condition of cities in the 1st square
             let wind_direction = []
+            let new_angle = 0
             zone_weather_condition.map((j)=>{
                 wind_direction.push(j.wind.deg)
             })
@@ -284,15 +284,16 @@ router.get('/radar',(req,res)=>{
             console.log('List of Wind Direction: '+ wind_direction)
             
             for (let k=0;k<wind_direction.length;k++){
+
                 let cursor = wind_direction[k]
                 let ref = 1
                 let ruler = wind_direction.filter(i=>i===cursor)
-                // console.log(ruler)
-                if(ruler.length>=ref){
+                console.log('Ruler output: '+ruler)
+                if(ruler.length>ref){
                     ref = ruler.length
                     new_angle = wind_direction[k]
                 }
-                // console.log(new_angle)
+                console.log('New angle: '+ new_angle)
             }
             wind_deg = new_angle
             // console.log('New wind direction is:'+ wind_deg)
@@ -301,7 +302,7 @@ router.get('/radar',(req,res)=>{
             y_point = y_new
             console.log(m+' Updated to point ' + x_point +', '+ y_point) 
             console.log('------|------|------|------|------|------') 
-        },3200*(m+1))
+        },4200*(m+1))
             
     }
 
@@ -310,7 +311,7 @@ router.get('/radar',(req,res)=>{
         // console.log(regional_weather_condition)
         console.log(zone_collection)
         res.json(regional_weather_condition) //render weather data of the cities in the predicative zone to Front End
-    },4300*radar_range_list.length)
+    },4400*radar_range_list.length)
 })
 
 router.get('/radar_2',(req,res)=>{

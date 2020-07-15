@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import ReactCSSTransitionGroup from 'react-transition-group';
 import '../../stylessheet/dashboard.css'
 
 class Dashboard extends Component {
@@ -14,7 +15,7 @@ class Dashboard extends Component {
 
     }
 
-    componentDidMount(){
+    pinMovement(){
         let increment = 180/(this.props.range[1]-this.props.range[0])
         let total = (this.props.nominal-this.props.range[0]) * increment
         this.setState({
@@ -23,12 +24,19 @@ class Dashboard extends Component {
         })        
     }
 
+    componentDidMount(){
+        this.pinMovement()
+    }
+
     render(){
         return(
             <div className='dashboard-container'>
                 <div className = 'dashboard'>
                     <div className ='shaft'></div>
-                    <div className ='pin'style={{transform:`rotate(${this.state.angle}deg)`}}></div>
+                    <div className ='pin'style={{
+                        transform:`rotate(${this.state.angle}deg)`
+                    }}>
+                    </div>
                     <div className='title'>{this.props.nominal}{this.props.unit}</div>
                     <div className='range1'>
                         {this.props.range[0]}{this.props.unit}

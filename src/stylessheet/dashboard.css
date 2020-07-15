@@ -38,6 +38,7 @@
     left:47.5%;
     transform-origin: 0% 100%;
     z-index:1;
+    transform:rotate(0degree)
 }
 
 .title{
