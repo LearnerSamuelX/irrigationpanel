@@ -108,9 +108,10 @@ router.get('/loggedin/citySearch',(req,res)=>{
                         weather_data = 'Error'
                         res.json(weather_data)
                     }else{
+                        let api_key='2357e9d6edbc1dca9778ffaae19a1bf0'
                         let cityname_url=status_check.cityName
                         let country_url=status_check.countryCode
-                        let raw = await fetch(`http://api.openweathermap.org/data/2.5/weather?q=${cityname_url},${country_url}&appid=${process.env.API_KEY}`)
+                        let raw = await fetch(`http://api.openweathermap.org/data/2.5/weather?q=${cityname_url},${country_url}&appid=${api_key}`)
                         weather_data = await raw.json();
                         res.json(weather_data)
                     }

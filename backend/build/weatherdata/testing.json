@@ -1,0 +1,23 @@
+[
+    {
+      "id": 833,
+      "name": "Ḩeşār-e Sefīd",
+      "state": "",
+      "country": "IR",
+      "coord": {
+        "lon": 47.159401,
+        "lat": 34.330502
+      }
+    },
+
+    {
+      "id": 6167865,
+      "name": "Toronto",
+      "state": "",
+      "country": "CA",
+      "coord": {
+        "lon": -79.416298,
+        "lat": 43.700111
+      }
+    }
+]
