@@ -20,7 +20,7 @@ app.use('/weather',weatherRoute)
 const atlas_uri = process.env.ATLAS_URI  //use local library for now
 const local_uri = process.env.LOCAL_URI
 
-mongoose.connect('mongodb+srv://a-stupid-user_25:jingEN6542@cluster0.mar0x.mongodb.net/ipanel?retryWrites=true&w=majority',{useNewUrlParser:true,useCreateIndex:true})
+mongoose.connect(atlas_uri,{useNewUrlParser:true,useCreateIndex:true})
 mongoose.set('useFindAndModify', false);
 
 const db = mongoose.connection
