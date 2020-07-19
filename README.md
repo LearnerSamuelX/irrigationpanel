@@ -8,8 +8,9 @@ In the summer, for those who do gardening works, occasionally they can be misled
 <br>
 
 Predicative zone formation timeline is shown in the `gif` image above with zone boundaries in different colours.  
-
-<img src=Analog.png height=300px>
+<p align='center'>
+<img src=Analog.png height=350px>
+</p>
 <br>
 
 Analog dashboard delivers relevant weather info with certain scales.
